@@ -28,7 +28,7 @@ public class Usuario {
     private String correo;
     
     @Column(name = "contraseña", nullable = false, length = 255)
-    private String contraseña;
+    private String contrasena;
     
     @ManyToOne
     @JoinColumn(name = "idRol", nullable = false)
