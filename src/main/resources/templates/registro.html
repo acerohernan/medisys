@@ -16,302 +16,8 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        font-family: "Inter", sans-serif;
-        background: #f0f4f8;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 32px 16px;
-      }
-
-      /* ── Card wrapper ── */
-      .register-card {
-        display: flex;
-        width: min(920px, 95vw);
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.14);
-        background: #fff;
-      }
-
-      /* ── Left panel – image ── */
-      .panel-image {
-        flex: 0 0 30%;
-        position: relative;
-        background: url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=900&q=80")
-          center/cover no-repeat;
-        min-height: 560px;
-      }
-      .panel-image::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          160deg,
-          rgba(10, 40, 100, 0.35) 0%,
-          rgba(5, 20, 60, 0.72) 100%
-        );
-      }
-      .panel-image-content {
-        position: absolute;
-        bottom: 36px;
-        left: 28px;
-        right: 28px;
-        z-index: 1;
-        color: #fff;
-      }
-      .panel-image-content .brand {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 6px;
-      }
-      .panel-image-content p {
-        font-size: 0.85rem;
-        line-height: 1.55;
-        opacity: 0.88;
-      }
-
-      /* ── Right panel – form ── */
-      .panel-form {
-        flex: 1;
-        padding: 44px 44px 36px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      /* Title */
-      .form-title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #1a4ed8;
-        font-size: 1.35rem;
-        font-weight: 700;
-        margin-bottom: 4px;
-      }
-      .form-title .icon-wrap {
-        width: 34px;
-        height: 34px;
-        background: #1a4ed8;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .form-title .icon-wrap i {
-        font-size: 1rem;
-        color: #fff;
-      }
-
-      .form-subtitle {
-        font-size: 0.87rem;
-        color: #6b7280;
-        margin-bottom: 24px;
-        line-height: 1.5;
-      }
-
-      /* Labels */
-      .form-label {
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        color: #374151;
-        margin-bottom: 5px;
-      }
-
-      /* Inputs */
-      .form-control,
-      .form-select {
-        border: 1.5px solid #d1d5db;
-        border-radius: 8px;
-        background: #f9fafb;
-        font-size: 0.9rem;
-        color: #111827;
-        padding: 10px 12px;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s,
-          background 0.2s;
-      }
-      .form-control:focus,
-      .form-select:focus {
-        border-color: #1a4ed8;
-        box-shadow: 0 0 0 3px rgba(26, 78, 216, 0.12);
-        background: #fff;
-        outline: none;
-      }
-      .form-control::placeholder {
-        color: #9ca3af;
-      }
-
-      /* Phone group */
-      .phone-group {
-        display: flex;
-        border: 1.5px solid #d1d5db;
-        border-radius: 8px;
-        background: #f9fafb;
-        overflow: hidden;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
-      }
-      .phone-group:focus-within {
-        border-color: #1a4ed8;
-        box-shadow: 0 0 0 3px rgba(26, 78, 216, 0.12);
-        background: #fff;
-      }
-      .phone-prefix {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #374151;
-        background: #e9eef6;
-        border-right: 1.5px solid #d1d5db;
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
-      .phone-input {
-        border: none;
-        background: transparent;
-        padding: 10px 12px;
-        font-size: 0.9rem;
-        color: #111827;
-        width: 100%;
-        outline: none;
-      }
-      .phone-input::placeholder {
-        color: #9ca3af;
-      }
-
-      /* Input with icon */
-      .input-icon-wrap {
-        display: flex;
-        align-items: center;
-        border: 1.5px solid #d1d5db;
-        border-radius: 8px;
-        background: #f9fafb;
-        overflow: hidden;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s,
-          background 0.2s;
-      }
-      .input-icon-wrap:focus-within {
-        border-color: #1a4ed8;
-        box-shadow: 0 0 0 3px rgba(26, 78, 216, 0.12);
-        background: #fff;
-      }
-      .input-icon-wrap .icon {
-        padding: 0 11px;
-        color: #9ca3af;
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-        font-size: 0.95rem;
-      }
-      .input-icon-wrap input {
-        border: none;
-        background: transparent;
-        padding: 10px 12px 10px 0;
-        font-size: 0.9rem;
-        color: #111827;
-        width: 100%;
-        outline: none;
-      }
-      .input-icon-wrap input::placeholder {
-        color: #9ca3af;
-      }
-
-      /* Buttons */
-      .btn-registrar {
-        background: #1a4ed8;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 11px 20px;
-        font-size: 0.93rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        cursor: pointer;
-        transition:
-          background 0.2s,
-          box-shadow 0.2s,
-          transform 0.1s;
-        box-shadow: 0 4px 14px rgba(26, 78, 216, 0.35);
-        white-space: nowrap;
-      }
-      .btn-registrar:hover {
-        background: #1740b0;
-        box-shadow: 0 6px 18px rgba(26, 78, 216, 0.45);
-      }
-      .btn-registrar:active {
-        transform: scale(0.98);
-      }
-
-      .btn-volver {
-        border: 1.5px solid #1a4ed8;
-        border-radius: 8px;
-        padding: 11px 20px;
-        font-size: 0.93rem;
-        font-weight: 600;
-        color: #1a4ed8;
-        background: transparent;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        cursor: pointer;
-        transition: background 0.2s;
-        white-space: nowrap;
-      }
-      .btn-volver:hover {
-        background: #eff3ff;
-      }
-
-      /* Terms */
-      .terms-text {
-        font-size: 0.8rem;
-        color: #6b7280;
-        text-align: center;
-        margin-top: 18px;
-        line-height: 1.55;
-      }
-      .terms-text a {
-        color: #1a4ed8;
-        text-decoration: none;
-      }
-      .terms-text a:hover {
-        text-decoration: underline;
-      }
-
-      /* Footer */
-      .footer-text {
-        margin-top: 24px;
-        font-size: 0.78rem;
-        color: #9ca3af;
-        text-align: center;
-      }
-    </style>
+    <link href="./css/registro.css" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/css/register.css}" />
   </head>
   <body>
     <div class="register-card">
@@ -327,7 +33,14 @@
       </div>
 
       <!-- Right: form panel -->
-      <div class="panel-form">
+      <form
+        class="panel-form"
+        th:action="@{/registro}"
+        th:object="${registroDTO}"
+        method="post"
+        id="formularioRegistro"
+        novalidate
+      >
         <div class="form-title">
           <div class="icon-wrap">
             <i class="bi bi-person-plus-fill"></i>
@@ -338,6 +51,12 @@
           Complete los campos a continuación para crear su historial clínico
           digital.
         </p>
+        <!-- CSRF Token -->
+        <input
+          type="hidden"
+          th:name="${_csrf.parameterName}"
+          th:value="${_csrf.token}"
+        />
 
         <!-- Nombres / Apellidos -->
         <div class="row g-3 mb-3">
@@ -349,6 +68,10 @@
               type="text"
               class="form-control"
               placeholder="Ej. Juan Carlos"
+              id="nombres"
+              th:field="*{nombres}"
+              required
+              th:classappend="${#fields.hasErrors('nombres') ? 'is-invalid' : ''}"
             />
           </div>
           <div class="col-6">
@@ -359,6 +82,10 @@
               type="text"
               class="form-control"
               placeholder="Ej. Pérez García"
+              id="apellidos"
+              th:field="*{apellidos}"
+              required
+              th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}"
             />
           </div>
         </div>
@@ -372,9 +99,16 @@
             <span class="icon"><i class="bi bi-envelope"></i></span>
             <input
               type="email"
+              class="form-control"
               placeholder="correo@ejemplo.com"
               autocomplete="email"
+              th:field="*{correo}"
+              required
+              th:classappend="${#fields.hasErrors('correo') ? 'is-invalid' : ''}"
             />
+          </div>
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('correo')}">
+            <span th:errors="*{correo}"></span>
           </div>
         </div>
 
@@ -438,7 +172,17 @@
                 type="password"
                 placeholder="••••••••"
                 autocomplete="new-password"
+                th:field="*{contrasena}"
+                class="form-control"
+                required
+                th:classappend="${#fields.hasErrors('contrasena') ? 'is-invalid' : ''}"
               />
+            </div>
+            <div
+              class="invalid-feedback"
+              th:if="${#fields.hasErrors('contrasena')}"
+            >
+              <span th:errors="*{contrasena}"></span>
             </div>
           </div>
           <div class="col-6">
@@ -451,19 +195,29 @@
                 type="password"
                 placeholder="••••••••"
                 autocomplete="new-password"
+                th:field="*{confirmarContrasena}"
+                class="form-control"
+                required
+                th:classappend="${#fields.hasErrors('confirmarContrasena') ? 'is-invalid' : ''}"
               />
+            </div>
+            <div
+              class="invalid-feedback"
+              th:if="${#fields.hasErrors('confirmarContrasena')}"
+            >
+              <span th:errors="*{confirmarContrasena}"></span>
             </div>
           </div>
         </div>
 
         <!-- Buttons -->
         <div class="d-flex gap-3">
-          <button class="btn-registrar flex-fill" type="button">
+          <button class="btn-registrar flex-fill" type="submit">
             <i class="bi bi-person-check-fill"></i> Registrarse
           </button>
-          <button class="btn-volver flex-fill" type="button">
+          <a class="btn-volver flex-fill text-decoration-none" href="/login">
             <i class="bi bi-arrow-left"></i> Volver al Login
-          </button>
+          </a>
         </div>
 
         <!-- Terms -->
@@ -472,12 +226,10 @@
           <a href="#">Términos y Condiciones</a> y la
           <a href="#">Política de Protección de Datos Personales</a>.
         </p>
-      </div>
+      </form>
     </div>
 
-    <p class="footer-text">
-      © 2024 Clínica Salud Perú · Todos los derechos reservados
-    </p>
+    <p class="footer-text">© 2026 MediSys · Todos los derechos reservados</p>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>

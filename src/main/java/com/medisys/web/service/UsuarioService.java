@@ -46,7 +46,7 @@ public class UsuarioService {
         }
 
         // Obtener el rol
-        Rol rol = rolRepository.findById(registroDTO.getIdRol())
+        Rol rol = rolRepository.findByNombre("PACIENTE")
                 .orElseThrow(() -> new Exception("El rol seleccionado no existe"));
 
         // Crear el nuevo usuario

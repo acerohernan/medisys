@@ -28,8 +28,4 @@ public class RegistroDTO {
     
     @NotBlank(message = "Debe confirmar la contraseña")
     private String confirmarContrasena;
-    
-    @NotNull(message = "Debe seleccionar un rol")
-    @Min(value = 1, message = "Debe seleccionar un rol válido")
-    private Integer idRol;
 }
