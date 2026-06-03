@@ -102,7 +102,8 @@ public class SecurityConfig {
                 .frameOptions(frameOptions -> frameOptions.deny())  // Previene clickjacking
                 .xssProtection(xss -> { })                          // Protección XSS
                 .contentSecurityPolicy(csp -> csp
-                    .policyDirectives("default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net;")          // CSP básico
+                    .policyDirectives("default-src *; script-src *; style-src *; img-src *; font-src *;")
+                    .reportOnly()
                 )
             )
             // Usar el AuthenticationProvider personalizado

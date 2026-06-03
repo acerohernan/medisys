@@ -354,15 +354,6 @@
           }
         }
       });
-
-      // Validación Bootstrap
-      formulario.addEventListener("submit", function (event) {
-        if (!formulario.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        formulario.classList.add("was-validated");
-      });
     </script>
   </body>
 </html>
