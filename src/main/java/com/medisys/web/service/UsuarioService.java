@@ -1,8 +1,10 @@
 package com.medisys.web.service;
 
 import com.medisys.web.dto.RegistroDTO;
+import com.medisys.web.entity.Paciente;
 import com.medisys.web.entity.Rol;
 import com.medisys.web.entity.Usuario;
+import com.medisys.web.repository.PacienteRepository;
 import com.medisys.web.repository.RolRepository;
 import com.medisys.web.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +22,16 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final PacienteRepository pacienteRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, 
+    public UsuarioService(UsuarioRepository usuarioRepository,
                          RolRepository rolRepository,
+                         PacienteRepository pacienteRepository,
                          PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
+        this.pacienteRepository = pacienteRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -62,6 +67,17 @@ public class UsuarioService {
         usuario = usuarioRepository.save(usuario);
         log.info("Usuario registrado exitosamente: {} con rol: {}", 
                 usuario.getCorreo(), rol.getNombre());
+
+        // Crear y guardar el paciente con la información faltante
+        Paciente paciente = new Paciente();
+        paciente.setUsuario(usuario);
+        paciente.setDni(registroDTO.getDni());
+        paciente.setTelefono(registroDTO.getTelefono());
+        paciente.setDireccion(registroDTO.getDireccion());
+        paciente.setFechaNacimiento(registroDTO.getFechaNacimiento());
+        paciente.setGenero(registroDTO.getGenero());
+        pacienteRepository.save(paciente);
+        log.info("Paciente creado para el usuario: {}", usuario.getCorreo());
 
         return usuario;
     }

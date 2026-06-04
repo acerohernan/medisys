@@ -4,6 +4,9 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -28,4 +31,23 @@ public class RegistroDTO {
     
     @NotBlank(message = "Debe confirmar la contraseña")
     private String confirmarContrasena;
+
+    @NotBlank(message = "El DNI es requerido")
+    @Pattern(regexp = "\\d{8}", message = "El DNI debe contener 8 dígitos")
+    private String dni;
+
+    @NotBlank(message = "El teléfono es requerido")
+    @Pattern(regexp = "\\d{9}", message = "El teléfono debe contener 9 dígitos")
+    private String telefono;
+
+    @NotBlank(message = "La dirección es requerida")
+    @Size(max = 200, message = "La dirección no puede exceder los 200 caracteres")
+    private String direccion;
+
+    @NotNull(message = "La fecha de nacimiento es requerida")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate fechaNacimiento;
+
+    @NotBlank(message = "El género es requerido")
+    private String genero;
 }

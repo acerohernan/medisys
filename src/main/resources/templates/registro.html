@@ -118,7 +118,19 @@
             <label class="form-label"
               ><i class="bi bi-calendar3 me-1"></i>Fecha de Nacimiento</label
             >
-            <input type="date" class="form-control" />
+            <input
+              type="date"
+              class="form-control"
+              th:field="*{fechaNacimiento}"
+              required
+              th:classappend="${#fields.hasErrors('fechaNacimiento') ? 'is-invalid' : ''}"
+            />
+            <div
+              class="invalid-feedback"
+              th:if="${#fields.hasErrors('fechaNacimiento')}"
+            >
+              <span th:errors="*{fechaNacimiento}"></span>
+            </div>
           </div>
           <div class="col-6">
             <label class="form-label"
@@ -128,7 +140,20 @@
               <span class="phone-prefix"
                 ><i class="bi bi-flag me-1"></i>+51</span
               >
-              <input type="tel" class="phone-input" placeholder="987 654 321" />
+              <input
+                type="tel"
+                class="phone-input"
+                placeholder="987654321"
+                th:field="*{telefono}"
+                required
+                th:classappend="${#fields.hasErrors('telefono') ? 'is-invalid' : ''}"
+              />
+            </div>
+            <div
+              class="invalid-feedback"
+              th:if="${#fields.hasErrors('telefono')}"
+            >
+              <span th:errors="*{telefono}"></span>
             </div>
           </div>
         </div>
@@ -142,22 +167,61 @@
             <span class="icon"><i class="bi bi-geo-alt"></i></span>
             <input
               type="text"
+              class="form-control"
               placeholder="Av. Javier Prado Este 123, San Isidro"
+              th:field="*{direccion}"
+              required
+              th:classappend="${#fields.hasErrors('direccion') ? 'is-invalid' : ''}"
             />
+          </div>
+          <div
+            class="invalid-feedback"
+            th:if="${#fields.hasErrors('direccion')}"
+          >
+            <span th:errors="*{direccion}"></span>
           </div>
         </div>
 
-        <!-- Género -->
-        <div class="mb-3">
-          <label class="form-label"
-            ><i class="bi bi-gender-ambiguous me-1"></i>Género</label
-          >
-          <select class="form-select">
-            <option value="" disabled selected>Seleccione...</option>
-            <option>Masculino</option>
-            <option>Femenino</option>
-            <option>Prefiero no indicar</option>
-          </select>
+        <!-- DNI / Género -->
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <label class="form-label"
+              ><i class="bi bi-credit-card me-1"></i>DNI</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              placeholder="12345678"
+              th:field="*{dni}"
+              required
+              th:classappend="${#fields.hasErrors('dni') ? 'is-invalid' : ''}"
+            />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('dni')}">
+              <span th:errors="*{dni}"></span>
+            </div>
+          </div>
+          <div class="col-6">
+            <label class="form-label"
+              ><i class="bi bi-gender-ambiguous me-1"></i>Género</label
+            >
+            <select
+              class="form-select"
+              th:field="*{genero}"
+              required
+              th:classappend="${#fields.hasErrors('genero') ? 'is-invalid' : ''}"
+            >
+              <option value="" disabled selected>Seleccione...</option>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Prefiero no indicar">Prefiero no indicar</option>
+            </select>
+            <div
+              class="invalid-feedback"
+              th:if="${#fields.hasErrors('genero')}"
+            >
+              <span th:errors="*{genero}"></span>
+            </div>
+          </div>
         </div>
 
         <!-- Contraseña / Confirmar -->
