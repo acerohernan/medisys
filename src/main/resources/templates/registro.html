@@ -51,6 +51,20 @@
           Complete los campos a continuación para crear su historial clínico
           digital.
         </p>
+
+        <div
+          th:if="${errorMessage}"
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          <strong>Error:</strong> <span th:text="${errorMessage}"></span>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
         <!-- CSRF Token -->
         <input
           type="hidden"

@@ -50,6 +50,11 @@ public class UsuarioService {
             throw new Exception("El correo ya está registrado");
         }
 
+        // Validar que el dni no exista
+        if (pacienteRepository.existsByDni(registroDTO.getDni())) {
+            throw new Exception("El DNI ya está registrado");
+        }
+
         // Obtener el rol
         Rol rol = rolRepository.findByNombre("PACIENTE")
                 .orElseThrow(() -> new Exception("El rol seleccionado no existe"));
