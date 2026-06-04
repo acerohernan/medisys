@@ -5,6 +5,8 @@ import com.medisys.web.entity.Rol;
 import com.medisys.web.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import com.medisys.web.config.RouteRedirectHelper;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +32,12 @@ public class RegistroController {
      * GET /registro - Muestra el formulario de registro
      */
     @GetMapping
-    public String mostrarFormularioRegistro(Model model) {
+    public String mostrarFormularioRegistro(Authentication authentication, Model model) {
+        if (authentication != null && authentication.isAuthenticated()
+                && authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS"))) {
+            return "redirect:" + RouteRedirectHelper.getRedirectFor(authentication);
+        }
+
         model.addAttribute("registroDTO", new RegistroDTO());
         
         // Obtener todos los roles disponibles
@@ -46,10 +53,15 @@ public class RegistroController {
      */
     @PostMapping
     public String registrarUsuario(
+            Authentication authentication,
             @Valid @ModelAttribute RegistroDTO registroDTO,
             BindingResult bindingResult,
             Model model
     ) {
+        if (authentication != null && authentication.isAuthenticated()
+                && authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS"))) {
+            return "redirect:" + RouteRedirectHelper.getRedirectFor(authentication);
+        }
         // Si hay errores de validación, volver a mostrar el formulario
         if (bindingResult.hasErrors()) {
             log.warn("Errores de validación en el registro: {}", bindingResult.getAllErrors());

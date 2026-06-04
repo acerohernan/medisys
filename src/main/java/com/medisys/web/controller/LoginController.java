@@ -2,6 +2,7 @@ package com.medisys.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.medisys.web.config.RouteRedirectHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +27,14 @@ public class LoginController {
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
             @RequestParam(value = "expired", required = false) String expired,
+            Authentication authentication,
             Model model
     ) {
+        if (authentication != null && authentication.isAuthenticated()
+                && authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS"))) {
+            return "redirect:" + RouteRedirectHelper.getRedirectFor(authentication);
+        }
+
         if (error != null) {
             logger.warn("Intento de login fallido");
             model.addAttribute("errorMessage", "Usuario o contraseña inválidos");

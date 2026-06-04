@@ -12,12 +12,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
  * Configuración de seguridad siguiendo las mejores prácticas de Spring Security 6+
  * Implementa autenticación segura con protección CSRF y gestión de sesiones
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -56,21 +57,25 @@ public class SecurityConfig {
                     "/login",
                     "/registro",
                     "/registro/**",
-                    "/access-denied"
+                    "/access-denied",
+                    "/error"
                 ).permitAll()
-                // Rutas del admin requieren rol ADMIN
+                // Rutas protegidas por rol
+                .requestMatchers("/").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/paciente/reserva-cita/**").hasAnyRole("PACIENTE","ADMIN")
+                .requestMatchers("/medico/historial-clinico/**").hasAnyRole("MEDICO","ADMIN")
                 // Cualquier otra ruta requiere autenticación
                 .anyRequest().authenticated()
             )
             // Configuración de login con form
             .formLogin(form -> form
-                .loginPage("/login")                    // Página personalizada de login
-                .loginProcessingUrl("/login")           // URL donde se procesa el formulario
-                .defaultSuccessUrl("/", true)           // Redirección tras login exitoso
-                .failureUrl("/login?error=true")        // Redirección si falla la autenticación
-                .usernameParameter("username")           // Parámetro del usuario (por defecto)
-                .passwordParameter("password")           // Parámetro de contraseña (por defecto)
+                .loginPage("/login")                    
+                .loginProcessingUrl("/login")           
+                .successHandler(customAuthenticationSuccessHandler())
+                .failureUrl("/login?error=true")        
+                .usernameParameter("username")          
+                .passwordParameter("password")          
                 .permitAll()
             )
             // Configuración de logout
@@ -88,7 +93,7 @@ public class SecurityConfig {
             })
             // Manejo de excepciones
             .exceptionHandling(exception -> exception
-                .accessDeniedPage("/access-denied")     // Página 403
+                .accessDeniedHandler(customAccessDeniedHandler())
             )
             // Configuración de sesiones
             .sessionManagement(session -> session
@@ -128,4 +133,15 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return customUserDetailsService;
     }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public CustomAccessDeniedHandler customAccessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
 }
+

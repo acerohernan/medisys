@@ -46,9 +46,38 @@
           <div class="alert alert-info">
             <p>
               Para acceder a funciones administrativas, visite
-              <a th:href="@{/admin}" class="alert-link">/admin</a> si su rol lo
-              permite.
+              <a th:href="@{/admin}" class="alert-link">/admin</a>.
             </p>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Pantalla de paciente</h5>
+                  <p class="card-text">
+                    Visualizar la pantalla de reserva de citas como paciente.
+                  </p>
+                  <a th:href="@{/paciente/reserva-cita}" class="btn btn-primary"
+                    >Ir a paciente</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Pantalla de médico</h5>
+                  <p class="card-text">
+                    Visualizar la pantalla de historial clínico como médico.
+                  </p>
+                  <a
+                    th:href="@{/medico/historial-clinico}"
+                    class="btn btn-primary"
+                    >Ir a médico</a
+                  >
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
