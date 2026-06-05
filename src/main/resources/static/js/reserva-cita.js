@@ -4,6 +4,7 @@ const state = {
   cost: "80.00",
   doctor: "Dr. Roberto Méndez",
   doctorCMP: "52341",
+  medicoId: null,
   doctorImg: "https://i.pravatar.cc/80?img=11",
   selectedDate: null,
   selectedTime: null,
@@ -121,6 +122,7 @@ function filterDoctorsBySpecialty(specialty) {
 function selectDoctor(el) {
   state.doctor = el.dataset.doctor;
   state.doctorCMP = el.dataset.cmp;
+  state.medicoId = el.dataset.idmedico;
   // Avatar index based on doctor name (use card img)
   const img = el.querySelector(".doctor-avatar");
   state.doctorImg = img ? img.src : state.doctorImg;
@@ -327,6 +329,7 @@ async function submitReservation() {
   const payload = {
     specialty: state.specialty,
     doctor: state.doctor,
+    medicoId: state.medicoId,
     doctorCMP: state.doctorCMP,
     date: state.selectedDate + "-" + (state.calMonth + 1) + "-" + state.calYear,
     time: state.selectedTime,
@@ -345,7 +348,7 @@ async function submitReservation() {
 
   try {
     const res = await fetch("/api/citas/reservar", {
-      // ← your endpoint here
+      credentials: "include",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

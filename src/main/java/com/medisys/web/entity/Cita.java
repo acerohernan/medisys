@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import jakarta.persistence.PrePersist;
 
 @Entity
 @Table(name = "Cita")
@@ -37,4 +39,20 @@ public class Cita {
     
     @Column(name = "observaciones", length = 255)
     private String observaciones;
+
+    @Column(name = "sede", length = 200)
+    private String sede;
+
+    @Column(name = "costo", precision = 10, scale = 2)
+    private BigDecimal costo;
+
+    @Column(name = "fechaCreacion")
+    private LocalDateTime fechaCreacion;
+
+    @PrePersist
+    protected void onCreate() {
+        if (fechaCreacion == null) {
+            fechaCreacion = LocalDateTime.now();
+        }
+    }
 }

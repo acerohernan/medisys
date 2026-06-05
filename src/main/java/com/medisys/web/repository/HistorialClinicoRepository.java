@@ -1,13 +1,11 @@
 package com.medisys.web.repository;
 
+import com.medisys.web.entity.HistorialClinico;
 import com.medisys.web.entity.Paciente;
-import com.medisys.web.entity.Usuario;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
-    boolean existsByDni(String dni);
-    Paciente findByUsuario(Usuario usuario);
+public interface HistorialClinicoRepository extends JpaRepository<HistorialClinico, Integer> {
+    HistorialClinico findByPaciente(Paciente paciente);
 }

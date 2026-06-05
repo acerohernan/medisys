@@ -64,6 +64,7 @@ public class SecurityConfig {
                 .requestMatchers("/").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/paciente/reserva-cita/**").hasAnyRole("PACIENTE","ADMIN")
+                .requestMatchers("/api/citas/reservar").hasAnyRole("PACIENTE","ADMIN")
                 .requestMatchers("/medico/historial-clinico/**").hasAnyRole("MEDICO","ADMIN")
                 // Cualquier otra ruta requiere autenticación
                 .anyRequest().authenticated()
@@ -87,10 +88,9 @@ public class SecurityConfig {
                 .permitAll()
             )
             // Protección CSRF habilitada por defecto en Spring Security 6+
-            .csrf(csrfConfigurer -> {
-                // Protege por defecto todos los métodos POST, PUT, DELETE
-                // Se requiere token CSRF en formularios
-            })
+            .csrf(csrfConfigurer -> csrfConfigurer
+                .ignoringRequestMatchers("/api/citas/reservar")
+            )
             // Manejo de excepciones
             .exceptionHandling(exception -> exception
                 .accessDeniedHandler(customAccessDeniedHandler())

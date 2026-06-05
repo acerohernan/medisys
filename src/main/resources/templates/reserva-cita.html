@@ -274,6 +274,7 @@
                 th:data-exp="${med.aniosExperiencia != null ? med.aniosExperiencia : 0} + ' años de experiencia'"
                 th:data-rating="${med.valoracion != null ? med.valoracion : 0}"
                 th:data-specialty="${med.especialidad.nombre}"
+                th:data-idmedico="${med.idMedico}"
               >
                 <div class="d-flex align-items-start gap-2">
                   <img
@@ -667,7 +668,7 @@
                     </div>
                     <div class="verified-badge">
                       <i class="bi bi-patch-check-fill"></i>Médico verificado
-                      por Clínica Salud Perú
+                      por MediSys
                     </div>
                   </div>
                 </div>
@@ -746,8 +747,8 @@
               <!-- Terms -->
               <div class="terms-note">
                 Al confirmar, usted acepta nuestros
-                <a href="#">términos de cancelación</a> y
-                <a href="#">política de privacidad de datos médicos</a>.
+                <a>términos de cancelación</a> y
+                <a>política de privacidad de datos médicos</a>.
               </div>
             </div>
 
