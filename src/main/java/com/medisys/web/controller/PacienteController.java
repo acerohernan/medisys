@@ -6,14 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.medisys.web.repository.EspecialidadRepository;
+import com.medisys.web.repository.MedicoRepository;
 
 @Controller
 public class PacienteController {
 
     private final EspecialidadRepository especialidadRepository;
+    private final MedicoRepository medicoRepository;
 
-    public PacienteController(EspecialidadRepository especialidadRepository) {
+    public PacienteController(EspecialidadRepository especialidadRepository,
+                              MedicoRepository medicoRepository) {
         this.especialidadRepository = especialidadRepository;
+        this.medicoRepository = medicoRepository;
     }
 
     @GetMapping("/paciente/reserva-cita")
@@ -22,6 +26,7 @@ public class PacienteController {
             model.addAttribute("username", authentication.getName());
         }
         model.addAttribute("especialidades", especialidadRepository.findAll());
+        model.addAttribute("medicos", medicoRepository.findAll());
         return "reserva-cita";
     }
 }

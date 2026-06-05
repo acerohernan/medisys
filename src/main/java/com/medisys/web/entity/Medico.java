@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Medico")
@@ -30,4 +31,16 @@ public class Medico {
     
     @Column(name = "telefono", length = 15)
     private String telefono;
+
+    @Column(name = "anios_experiencia")
+    private Integer aniosExperiencia;
+
+    @Column(name = "foto_url", length = 255)
+    private String fotoUrl;
+
+    @Column(name = "valoracion", precision = 3, scale = 2)
+    private BigDecimal valoracion;
+
+    @Column(name = "disponibilidad", length = 100)
+    private String disponibilidad;
 }

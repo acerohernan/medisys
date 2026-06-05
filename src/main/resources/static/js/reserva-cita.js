@@ -91,15 +91,30 @@ function goToStep2() {
     state.specialty;
   document.getElementById("sum2-specialty").textContent = state.specialty;
   document.getElementById("sum2-cost").textContent = "S/ " + state.cost;
-  // Update doctor cards specialty labels
-  document
-    .querySelectorAll(".doctor-card .doctor-specialty")
-    .forEach((el) => (el.textContent = state.specialty));
+  filterDoctorsBySpecialty(state.specialty);
   hide("step1");
   hide("step3");
   hide("step4");
   hide("step-success");
   show("step2");
+}
+
+function filterDoctorsBySpecialty(specialty) {
+  const cards = document.querySelectorAll(".doctor-card");
+  let visibleCount = 0;
+
+  cards.forEach((card) => {
+    const isMatch = card.dataset.specialty === specialty;
+    card.style.display = isMatch ? "" : "none";
+    if (isMatch) {
+      visibleCount += 1;
+    }
+  });
+
+  const noDoctors = document.getElementById("noDoctorsMsg");
+  if (noDoctors) {
+    noDoctors.style.display = visibleCount === 0 ? "block" : "none";
+  }
 }
 
 // ── STEP 2 ─────────────────────────────────────────────────────────────────
@@ -403,3 +418,4 @@ function selectDefaultSpecialty() {
 renderCalendar();
 renderSlots();
 selectDefaultSpecialty();
+filterDoctorsBySpecialty(state.specialty);
