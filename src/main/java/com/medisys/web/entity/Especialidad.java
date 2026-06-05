@@ -1,5 +1,7 @@
 package com.medisys.web.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,4 +21,13 @@ public class Especialidad {
     
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+
+    @Column(name = "descripcion", nullable = false)
+    private String descripcion;
+
+    @Column(name = "icon_class", nullable = false, length = 100)
+    private String iconClass;
+
+    @Column(name = "costo", precision = 18, scale = 2)
+    private BigDecimal costo;
 }
