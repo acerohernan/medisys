@@ -1,0 +1,54 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: medisys_mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: --default-authentication-plugin=caching_sha2_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medisys-network
+
+  web:
+    image: acerohernan/medisys-web:latest
+    container_name: medisys_web
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - medisys-network
+
+  proxy:
+    image: caddy:2.9-alpine
+    container_name: medisys_proxy
+    restart: unless-stopped
+    depends_on:
+      - web
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - medisys-network
+
+volumes:
+  mysql-data:
+
+networks:
+  medisys-network:
+    driver: bridge
