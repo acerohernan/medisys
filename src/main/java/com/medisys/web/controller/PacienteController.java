@@ -1,14 +1,19 @@
 package com.medisys.web.controller;
 
+import java.util.Collections;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.medisys.web.entity.HistorialClinico;
 import com.medisys.web.entity.Paciente;
 import com.medisys.web.entity.Usuario;
 import com.medisys.web.repository.CitaRepository;
+import com.medisys.web.repository.ConsultaMedicaRepository;
 import com.medisys.web.repository.EspecialidadRepository;
+import com.medisys.web.repository.HistorialClinicoRepository;
 import com.medisys.web.repository.MedicoRepository;
 import com.medisys.web.repository.PacienteRepository;
 import com.medisys.web.repository.UsuarioRepository;
@@ -24,6 +29,8 @@ public class PacienteController {
     private final UsuarioRepository usuarioRepository;
     private final CitaRepository citaRepository;
     private final PacienteRepository pacienteRepository;
+    private final HistorialClinicoRepository historialClinicoRepository;
+    private final ConsultaMedicaRepository consultaMedicaRepository;
 
     @GetMapping("/paciente")
     public String index(Authentication authentication, Model model) {
@@ -38,7 +45,13 @@ public class PacienteController {
         if (paciente == null)
             return "redirect:/login";
 
-        model.addAttribute("citas", citaRepository.findByPaciente(paciente));
+        var citas = citaRepository.findByPaciente(paciente);
+        model.addAttribute("citas", citas);
+
+        HistorialClinico historial = historialClinicoRepository.findByPaciente(paciente);
+        model.addAttribute("consultas", historial != null
+                ? consultaMedicaRepository.findByHistorialClinico(historial)
+                : Collections.emptyList());
 
         return "paciente/index";
     }

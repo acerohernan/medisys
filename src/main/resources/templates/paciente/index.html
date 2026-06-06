@@ -19,27 +19,8 @@
     <link rel="stylesheet" th:href="@{/css/paciente.css}" />
   </head>
   <body>
-    <!-- DEMO TOGGLE -->
-    <div class="demo-toggle-bar">
-      <strong>Demo:</strong> Ver como
-      <button
-        class="demo-btn active"
-        id="btn-con-citas"
-        onclick="setView('con-citas')"
-      >
-        Paciente con citas
-      </button>
-      <button
-        class="demo-btn"
-        id="btn-sin-citas"
-        onclick="setView('sin-citas')"
-      >
-        Nuevo paciente (sin citas)
-      </button>
-    </div>
-
-    <!-- ══════════ VIEW: CON CITAS ══════════ -->
-    <div id="view-con-citas">
+    <!--VIEW CON CITAS -->
+    <div id="view-con-citas" th:if="${citas != null && !#lists.isEmpty(citas)}">
       <main
         class="container-fluid px-3 px-lg-4 py-4 flex-grow-1"
         style="max-width: 1200px; margin: 0 auto"
@@ -60,9 +41,12 @@
               Gestiona tus atenciones médicas y revisa tu historial clínico.
             </p>
           </div>
-          <button class="btn-nueva-cita">
+          <a
+            class="btn-nueva-cita text-decoration-none"
+            href="/paciente/reserva-cita"
+          >
             <i class="bi bi-plus-circle-fill"></i> Nueva Reserva de Cita
-          </button>
+          </a>
         </div>
 
         <div class="row g-4">
@@ -76,78 +60,101 @@
                 <div class="section-title">
                   <i class="bi bi-clock-history"></i> Citas Próximas
                 </div>
-                <span class="badge-count">2 PENDIENTES</span>
+                <span
+                  class="badge-count"
+                  th:text="${#lists.size(citas)} + ' PENDIENTES'"
+                  >2 PENDIENTES</span
+                >
               </div>
 
-              <div class="d-flex flex-column gap-3">
-                <!-- Cita 1: Cardiología -->
-                <div class="appt-card d-flex">
+              <div
+                class="d-flex flex-column gap-3"
+                th:if="${citas != null && !#lists.isEmpty(citas)}"
+              >
+                <div class="appt-card d-flex" th:each="cita : ${citas}">
                   <div class="appt-date-col">
-                    <span class="day">15</span>
-                    <span class="month">OCTUBRE</span>
-                    <span class="time">09:30 AM</span>
+                    <span
+                      class="day"
+                      th:text="${#temporals.format(cita.fechaHora, 'dd')}"
+                      >15</span
+                    >
+                    <span
+                      class="month"
+                      th:text="${#temporals.format(cita.fechaHora, 'MMMM').toUpperCase()}"
+                      >OCTUBRE</span
+                    >
+                    <span
+                      class="time"
+                      th:text="${#temporals.format(cita.fechaHora, 'hh:mm a')}"
+                      >09:30 AM</span
+                    >
                   </div>
                   <div
                     class="appt-body d-flex flex-column justify-content-center"
                   >
                     <div class="d-flex align-items-center gap-2 mb-1">
-                      <span class="appt-specialty">Cardiología</span>
-                      <span class="badge-confirmed"
-                        ><i class="bi bi-check-circle-fill"></i>
-                        Confirmada</span
+                      <span
+                        class="appt-specialty"
+                        th:text="${cita.medico.especialidad.nombre}"
+                        >Cardiología</span
                       >
+                      <span
+                        class="badge-confirmed"
+                        th:if="${cita.estado != 'Programada'}"
+                      >
+                        <i class="bi bi-check-circle-fill"></i>
+                        Confirmada
+                      </span>
+                      <span
+                        class="badge-pending"
+                        th:if="${cita.estado == 'Programada'}"
+                      >
+                        <i class="bi bi-hourglass-split"></i>
+                        Pendiente
+                      </span>
                     </div>
-                    <div class="appt-doctor">Dr. Ricardo Alvares M.</div>
+                    <div
+                      class="appt-doctor"
+                      th:text="${cita.medico.usuario.nombres} + ' ' + ${cita.medico.usuario.apellidos}"
+                    >
+                      Dr. Ricardo Alvares M.
+                    </div>
                     <div class="appt-meta d-flex flex-wrap gap-3 mt-1">
                       <span
-                        ><i class="bi bi-geo-alt me-1"></i>Sede Central –
-                        Consultorio 402</span
+                        ><i class="bi bi-geo-alt me-1"></i
+                        ><span
+                          th:text="${cita.sede != null ? cita.sede : 'Sede Central – Consultorio 402'}"
+                          >Sede Central – Consultorio 402</span
+                        ></span
                       >
                       <span
-                        ><i class="bi bi-clipboard2-pulse me-1"></i>Consulta de
-                        Seguimiento</span
+                        ><i class="bi bi-clipboard2-pulse me-1"></i
+                        ><span
+                          th:text="${cita.motivo != null ? cita.motivo : 'Consulta médica'}"
+                          >Consulta de Seguimiento</span
+                        ></span
                       >
                     </div>
                   </div>
-                  <div class="d-flex align-items-center px-3">
-                    <button class="btn-gestionar">Gestionar</button>
-                  </div>
-                </div>
-
-                <!-- Cita 2: Dermatología -->
-                <div class="appt-card d-flex" style="--appt-bg: #f59e0b">
-                  <div class="appt-date-col" style="background: #92400e">
-                    <span class="day">22</span>
-                    <span class="month">OCTUBRE</span>
-                    <span class="time">04:15 PM</span>
-                  </div>
-                  <div
-                    class="appt-body d-flex flex-column justify-content-center"
-                  >
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                      <span class="appt-specialty" style="color: var(--warning)"
-                        >Dermatología</span
-                      >
-                      <span class="badge-pending"
-                        ><i class="bi bi-hourglass-split"></i> Pendiente</span
-                      >
-                    </div>
-                    <div class="appt-doctor">Dra. Elena Santillán</div>
-                    <div class="appt-meta d-flex flex-wrap gap-3 mt-1">
-                      <span
-                        ><i class="bi bi-geo-alt me-1"></i>Sede Miraflores – Av.
-                        Larco 123</span
-                      >
-                      <span
-                        ><i class="bi bi-clipboard2-pulse me-1"></i>Evaluación
-                        Inicial</span
-                      >
-                    </div>
-                  </div>
-                  <div class="d-flex align-items-center px-3">
+                  <!-- <div class="d-flex align-items-center px-3">
                     <button class="btn-ver">Ver<br />Detalles</button>
-                  </div>
+                  </div> -->
                 </div>
+              </div>
+              <div
+                class="empty-box"
+                th:if="${citas == null || #lists.isEmpty(citas)}"
+              >
+                <div class="empty-icon"><i class="bi bi-calendar2-x"></i></div>
+                <h5>No hay citas programadas</h5>
+                <p>
+                  Aún no tienes citas programadas. Empieza a cuidar tu salud
+                  agendando una consulta con nuestros especialistas.
+                </p>
+                <button class="btn-primera-cita">
+                  <i class="bi bi-calendar2-plus-fill"></i> Programar mi primera
+                  cita
+                </button>
               </div>
             </div>
 
@@ -159,9 +166,6 @@
                 <div class="section-title">
                   <i class="bi bi-clock-history"></i> Historial de Consultas
                 </div>
-                <a href="#" class="link-ver-todo"
-                  >Ver todo el historial <i class="bi bi-arrow-right"></i
-                ></a>
               </div>
               <div class="table-responsive">
                 <table class="table historial-table mb-0">
@@ -173,35 +177,52 @@
                       <th>Acciones</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody
+                    th:if="${consultas != null && !#lists.isEmpty(consultas)}"
+                    th:each="consulta : ${consultas}"
+                  >
                     <tr>
                       <td>
                         <div class="d-flex align-items-center gap-2">
-                          <div class="doctor-avatar">RS</div>
-                          Dr. Roberto Sanchez
+                          <div
+                            class="doctor-avatar"
+                            th:text="${consulta.medico.usuario.nombres.substring(0,1)} + ${consulta.medico.usuario.apellidos.substring(0,1)}"
+                          >
+                            RS
+                          </div>
+                          <span
+                            th:text="${consulta.medico.usuario.nombres} + ' ' + consulta.medico.usuario.apellidos"
+                            >Dr. Roberto Sanchez</span
+                          >
                         </div>
                       </td>
-                      <td>Medicina General</td>
-                      <td>12 Sep 2023</td>
+                      <td th:text="${consulta.medico.especialidad.nombre}">
+                        Medicina General
+                      </td>
+                      <td
+                        th:text="${#temporals.format(consulta.fecha, 'dd MMM yyyy')}"
+                      >
+                        12 Sep 2023
+                      </td>
                       <td>
                         <a href="#" class="link-accion"
-                          ><i class="bi bi-file-earmark-text"></i> Receta</a
+                          ><i class="bi bi-file-earmark-text"></i> Ver</a
                         >
                       </td>
                     </tr>
+                  </tbody>
+                  <tbody
+                    th:if="${consultas == null || #lists.isEmpty(consultas)}"
+                  >
                     <tr>
-                      <td>
-                        <div class="d-flex align-items-center gap-2">
-                          <div class="doctor-avatar green">LT</div>
-                          Dra. Lucia Torres
+                      <td colspan="4">
+                        <div class="empty-historial">
+                          <i class="bi bi-file-earmark-x"></i>
+                          <span
+                            >Una vez que asista a sus citas, aquí aparecerán sus
+                            registros médicos y recomendaciones.</span
+                          >
                         </div>
-                      </td>
-                      <td>Pediatría</td>
-                      <td>05 Ago 2023</td>
-                      <td>
-                        <a href="#" class="link-accion"
-                          ><i class="bi bi-file-earmark-medical"></i> Informe</a
-                        >
                       </td>
                     </tr>
                   </tbody>
@@ -255,20 +276,14 @@
             <!-- App -->
             <div class="app-card">
               <h6>
-                <i class="bi bi-phone-fill me-1"></i> Tu salud en tu móvil
+                <i class="bi bi-phone-fill me-1"></i> Tu salud es nuestra
+                prioridad
               </h6>
               <p>
-                Descarga nuestra App y recibe notificaciones de tus citas en
-                tiempo real.
+                MediSys es un sistema de gestión clínica diseñado para mejorar
+                la experiencia de los pacientes, optimizar la atención médica y
+                facilitar la administración de las clínicas.
               </p>
-              <div class="d-flex gap-2">
-                <button class="btn-store">
-                  <i class="bi bi-apple"></i> App Store
-                </button>
-                <button class="btn-store">
-                  <i class="bi bi-google-play"></i> Play Store
-                </button>
-              </div>
             </div>
           </div>
           <!-- /sidebar -->
@@ -277,8 +292,8 @@
       </main>
     </div>
 
-    <!-- ══════════ VIEW: SIN CITAS (NUEVO PACIENTE) ══════════ -->
-    <div id="view-empty" style="display: none">
+    <!-- VIEW: SIN CITAS (NUEVO PACIENTE) -->
+    <div id="view-empty" th:if="${citas == null || #lists.isEmpty(citas)}">
       <main
         class="container-fluid px-3 px-lg-4 py-4 flex-grow-1"
         style="max-width: 1200px; margin: 0 auto"
@@ -322,7 +337,56 @@
               <div class="section-title mb-3">
                 <i class="bi bi-clock-history"></i> Historial de Consultas
               </div>
-              <div class="empty-historial">
+              <div
+                class="table-responsive"
+                th:if="${consultas != null && !#lists.isEmpty(consultas)}"
+              >
+                <table class="table historial-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Médico</th>
+                      <th>Especialidad</th>
+                      <th>Fecha</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody th:each="consulta : ${consultas}">
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center gap-2">
+                          <div
+                            class="doctor-avatar"
+                            th:text="${consulta.medico.usuario.nombres.substring(0,1)} + ${consulta.medico.usuario.apellidos.substring(0,1)}"
+                          >
+                            RS
+                          </div>
+                          <span
+                            th:text="${consulta.medico.usuario.nombres} + ' ' + consulta.medico.usuario.apellidos"
+                            >Dr. Roberto Sanchez</span
+                          >
+                        </div>
+                      </td>
+                      <td th:text="${consulta.medico.especialidad.nombre}">
+                        Medicina General
+                      </td>
+                      <td
+                        th:text="${#temporals.format(consulta.fecha, 'dd MMM yyyy')}"
+                      >
+                        12 Sep 2023
+                      </td>
+                      <td>
+                        <a href="#" class="link-accion"
+                          ><i class="bi bi-file-earmark-text"></i> Ver</a
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div
+                class="empty-historial"
+                th:if="${consultas == null || #lists.isEmpty(consultas)}"
+              >
                 <i class="bi bi-file-earmark-x"></i>
                 <span
                   >Una vez que asista a sus citas, aquí aparecerán sus registros

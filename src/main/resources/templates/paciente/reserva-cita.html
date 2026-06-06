@@ -176,7 +176,9 @@
                 <button class="btn-primary-full" onclick="goToStep2()">
                   Siguiente Paso <i class="bi bi-arrow-right ms-1"></i>
                 </button>
-                <button class="btn-ghost-full">Cancelar Reserva</button>
+                <a class="btn-ghost-full text-decoration-none" href="/paciente">
+                  Cancelar Reserva
+                </a>
               </div>
               <div class="px-3 pb-3">
                 <div class="alert-info-custom">
@@ -779,9 +781,9 @@
             <button class="btn-new-appt" onclick="resetFlow()">
               <i class="bi bi-plus-circle"></i>Programar otra cita
             </button>
-            <button class="btn-profile">
-              <i class="bi bi-person-circle"></i>Ir a mi Perfil
-            </button>
+            <a class="btn-profile text-decoration-none" href="/paciente">
+              <i class="bi bi-calendar2-check"></i>Ver mis citas
+            </a>
           </div>
         </div>
       </div>
