@@ -32,10 +32,10 @@ public class CitaController {
     private final UsuarioRepository usuarioRepository;
 
     public CitaController(PacienteRepository pacienteRepository,
-                          MedicoRepository medicoRepository,
-                          CitaRepository citaRepository,
-                          HistorialClinicoRepository historialRepository,
-                          UsuarioRepository usuarioRepository) {
+            MedicoRepository medicoRepository,
+            CitaRepository citaRepository,
+            HistorialClinicoRepository historialRepository,
+            UsuarioRepository usuarioRepository) {
         this.pacienteRepository = pacienteRepository;
         this.medicoRepository = medicoRepository;
         this.citaRepository = citaRepository;
@@ -56,7 +56,7 @@ public class CitaController {
 
     @PostMapping(path = "/api/citas/reservar", consumes = "application/json")
     public ResponseEntity<?> reservar(@RequestBody ReservationRequest req,
-                                      @AuthenticationPrincipal Object principal) {
+            @AuthenticationPrincipal Object principal) {
         if (req == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Datos incompletos"));
         }
@@ -77,12 +77,14 @@ public class CitaController {
 
         Usuario usuario = usuarioRepository.findByCorreo(username).orElse(null);
         if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Usuario autenticado no encontrado"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Usuario autenticado no encontrado"));
         }
 
-        Paciente paciente = pacienteRepository.findByUsuario(usuario);
+        Paciente paciente = pacienteRepository.findByUsuario(usuario).orElse(null);
         if (paciente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Paciente no encontrado para el usuario autenticado"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Paciente no encontrado para el usuario autenticado"));
         }
 
         Medico medico = medicoRepository.findById(req.medicoId).orElse(null);
@@ -112,7 +114,8 @@ public class CitaController {
             java.time.LocalTime lt = java.time.LocalTime.parse(req.time, tf);
             fechaHora = LocalDateTime.of(year, month, day, lt.getHour(), lt.getMinute());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Formato de fecha/hora inválido"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Formato de fecha/hora inválido"));
         }
 
         Cita cita = new Cita();
