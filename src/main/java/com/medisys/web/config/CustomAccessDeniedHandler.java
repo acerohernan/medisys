@@ -27,9 +27,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             if (isAdmin) {
                 redirectUrl = request.getContextPath() + "/";
             } else if (isPaciente) {
-                redirectUrl = request.getContextPath() + "/paciente/reserva-cita";
+                redirectUrl = request.getContextPath() + "/paciente";
             } else if (isMedico) {
-                redirectUrl = request.getContextPath() + "/medico/historial-clinico";
+                redirectUrl = request.getContextPath() + "/medico";
             }
         }
 

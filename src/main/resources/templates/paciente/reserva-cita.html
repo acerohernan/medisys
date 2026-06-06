@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reserva tu Cita Médica – MediSys</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/reserva-cita.css}" />
+  </head>
+  <body>
+    <!-- SPINNER -->
+    <div class="spinner-overlay" id="spinnerOverlay">
+      <div class="spinner-box">
+        <div
+          class="spinner-border text-primary"
+          style="width: 2.5rem; height: 2.5rem"
+          role="status"
+        ></div>
+        <p id="spinnerMsg">Procesando tu reserva…</p>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="page-header">
+      <div class="container">
+        <h1>
+          <i class="bi bi-calendar2-heart me-2" style="font-size: 1.4rem"></i
+          >Reserva tu Cita Médica
+        </h1>
+        <p>Completa los pasos para agendar tu atención en Sede Central Lima.</p>
+      </div>
+    </div>
+
+    <!-- =================== STEP 1 =================== -->
+    <div id="step1">
+      <div class="stepper-wrap">
+        <div class="stepper">
+          <div class="step-item active" data-step="1">
+            <div class="step-circle">1</div>
+            <span class="step-label">Especialidad</span>
+          </div>
+          <div class="step-item" data-step="2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Doctor</span>
+          </div>
+          <div class="step-item" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Fecha y Hora</span>
+          </div>
+          <div class="step-item" data-step="4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Confirmación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container main-content">
+        <div class="d-flex gap-4 flex-wrap flex-lg-nowrap">
+          <div class="content-col">
+            <!-- Step 1 Panel -->
+            <div class="card-section fade-in">
+              <div class="section-title">
+                <i class="bi bi-grid-1x2"></i>
+                Paso 1: Seleccione Especialidad
+              </div>
+              <div class="specialty-grid">
+                <div
+                  th:each="esp : ${especialidades}"
+                  class="specialty-card"
+                  th:attr="data-specialty=${esp.nombre},data-cost=${esp.costo},data-icon=${esp.iconClass}"
+                  onclick="selectSpecialty(this)"
+                >
+                  <div class="specialty-icon">
+                    <i th:class="${esp.iconClass}"></i>
+                  </div>
+                  <div>
+                    <div class="specialty-name" th:text="${esp.nombre}">
+                      Nombre
+                    </div>
+                    <div class="specialty-desc" th:text="${esp.descripcion}">
+                      &nbsp;
+                    </div>
+                  </div>
+                  <div class="check-badge"><i class="bi bi-check"></i></div>
+                </div>
+                <div
+                  th:if="${especialidades == null or #lists.isEmpty(especialidades)}"
+                  class="w-100"
+                >
+                  <div class="alert-info-custom">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <span
+                      ><strong>No hay especialidades</strong><br />Aún no
+                      existen especialidades registradas. Contacte al
+                      administrador.</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 locked -->
+            <div
+              class="card-section mt-3"
+              style="opacity: 0.55; pointer-events: none"
+            >
+              <div class="section-title" style="color: var(--text-muted)">
+                <i
+                  class="bi bi-person-badge"
+                  style="color: var(--text-muted)"
+                ></i>
+                Paso 2: Seleccione Médico
+              </div>
+              <p class="text-muted small mb-0">
+                Complete el paso anterior para ver médicos disponibles.
+              </p>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="sidebar-col">
+            <div class="summary-card">
+              <div class="summary-header">
+                <h6>
+                  <i class="bi bi-clipboard2-check me-2"></i>Resumen de Reserva
+                </h6>
+                <small>Sede Central Lima</small>
+              </div>
+              <div class="summary-body">
+                <div class="summary-row">
+                  <div class="summary-icon"><i class="bi bi-hospital"></i></div>
+                  <div>
+                    <div class="summary-label">Sede</div>
+                    <div class="summary-value">Sede Central Lima</div>
+                  </div>
+                </div>
+                <div class="summary-row">
+                  <div class="summary-icon">
+                    <i id="sum1-icon" class="bi bi-shield-plus"></i>
+                  </div>
+                  <div>
+                    <div class="summary-label">Especialidad</div>
+                    <div class="summary-value primary" id="sum1-specialty">
+                      Medicina General
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cost-box">
+                <div class="cost-row">
+                  <span>Costo de Consulta</span>
+                  <strong id="sum1-cost">S/ 80.00</strong>
+                </div>
+                <div
+                  style="
+                    font-size: 0.72rem;
+                    color: var(--text-muted);
+                    margin-top: 0.3rem;
+                  "
+                >
+                  Aplica para pacientes particulares sin seguro.
+                </div>
+              </div>
+              <div class="p-3 d-flex flex-column gap-2">
+                <button class="btn-primary-full" onclick="goToStep2()">
+                  Siguiente Paso <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+                <button class="btn-ghost-full">Cancelar Reserva</button>
+              </div>
+              <div class="px-3 pb-3">
+                <div class="alert-info-custom">
+                  <i class="bi bi-info-circle-fill"></i>
+                  <span
+                    ><strong>Aviso Importante</strong><br />Recuerde llegar 15
+                    minutos antes de su cita para el registro en
+                    recepción.</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== STEP 2 =================== -->
+    <div id="step2" style="display: none">
+      <div class="stepper-wrap">
+        <div class="stepper">
+          <div class="step-item completed" data-step="1">
+            <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+            <span class="step-label">Especialidad</span>
+          </div>
+          <div class="step-item active" data-step="2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Médico</span>
+          </div>
+          <div class="step-item" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Horario</span>
+          </div>
+          <div class="step-item" data-step="4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Confirmación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container main-content">
+        <div class="d-flex gap-4 flex-wrap flex-lg-nowrap">
+          <div class="content-col">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <h2 class="mb-0" style="font-size: 1.5rem; font-weight: 800">
+                  Seleccione un Médico
+                </h2>
+                <span class="text-muted small">Especialidad: </span>
+                <span
+                  style="
+                    color: var(--primary);
+                    font-weight: 700;
+                    font-size: 0.88rem;
+                  "
+                  id="step2-specialty-label"
+                  >Medicina General</span
+                >
+              </div>
+            </div>
+
+            <div class="doctor-grid">
+              <div id="noDoctorsMsg" class="w-100" style="display: none">
+                <div class="alert-info-custom">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                  <span
+                    ><strong>No hay médicos disponibles</strong><br />No se
+                    encontraron médicos para esta especialidad. Intenta con otra
+                    especialidad o contacta al administrador.</span
+                  >
+                </div>
+              </div>
+
+              <div
+                th:if="${medicos == null or #lists.isEmpty(medicos)}"
+                class="w-100"
+              >
+                <div class="alert-info-custom">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                  <span
+                    ><strong>No hay médicos registrados</strong><br />Aún no
+                    existen médicos en la base de datos. Contacta al
+                    administrador.</span
+                  >
+                </div>
+              </div>
+
+              <div
+                th:each="med : ${medicos}"
+                class="doctor-card"
+                onclick="selectDoctor(this)"
+                th:data-doctor="${med.usuario.nombres + ' ' + med.usuario.apellidos}"
+                th:data-cmp="${med.numeroColegiatura}"
+                th:data-avail="${med.disponibilidad != null ? med.disponibilidad : 'DISPONIBLE HOY'}"
+                th:data-exp="${med.aniosExperiencia != null ? med.aniosExperiencia : 0} + ' años de experiencia'"
+                th:data-rating="${med.valoracion != null ? med.valoracion : 0}"
+                th:data-specialty="${med.especialidad.nombre}"
+                th:data-idmedico="${med.idMedico}"
+              >
+                <div class="d-flex align-items-start gap-2">
+                  <img
+                    th:src="${med.fotoUrl != null ? med.fotoUrl : 'https://i.pravatar.cc/56?img=1'}"
+                    class="doctor-avatar"
+                    alt="Doctor"
+                  />
+                  <div class="flex-1" style="min-width: 0">
+                    <div
+                      class="d-flex align-items-center justify-content-between gap-1 mb-1"
+                    >
+                      <div
+                        class="doctor-name"
+                        th:text="${med.usuario.nombres + ' ' + med.usuario.apellidos}"
+                      >
+                        Doctor
+                      </div>
+                      <div class="rating-badge">
+                        <i class="bi bi-star-fill"></i>
+                        <span
+                          th:text="${med.valoracion != null ? med.valoracion : 0}"
+                          >4.9</span
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="doctor-specialty"
+                      th:text="${med.especialidad.nombre}"
+                    >
+                      Medicina General
+                    </div>
+                    <div class="doctor-exp mt-1">
+                      <i
+                        class="bi bi-award text-primary me-1"
+                        style="font-size: 0.75rem"
+                      ></i>
+                      <span
+                        th:text="${med.aniosExperiencia != null ? med.aniosExperiencia : 0} + ' años de experiencia'"
+                      >
+                        12 años de experiencia
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn-select">Seleccionar</button>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <button class="btn-back" onclick="goToStep1()">
+                <i class="bi bi-arrow-left"></i> Atrás
+              </button>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="sidebar-col">
+            <div class="summary-card">
+              <div class="summary-header">
+                <h6>
+                  <i class="bi bi-clipboard2-check me-2"></i>Resumen de Reserva
+                </h6>
+              </div>
+              <div class="summary-body">
+                <div class="summary-row">
+                  <div class="summary-icon">
+                    <i class="bi bi-shield-plus"></i>
+                  </div>
+                  <div>
+                    <div class="summary-label">Especialidad</div>
+                    <div class="summary-value" id="sum2-specialty">
+                      Medicina General
+                    </div>
+                  </div>
+                </div>
+                <div class="summary-row">
+                  <div class="summary-icon"><i class="bi bi-person"></i></div>
+                  <div>
+                    <div class="summary-label">Médico</div>
+                    <div class="summary-value pending" id="sum2-doctor">
+                      No seleccionado
+                    </div>
+                  </div>
+                </div>
+                <div class="summary-row">
+                  <div class="summary-icon">
+                    <i class="bi bi-calendar3"></i>
+                  </div>
+                  <div>
+                    <div class="summary-label">Fecha y Hora</div>
+                    <div class="summary-value pending">Pendiente</div>
+                  </div>
+                </div>
+              </div>
+              <div class="cost-box">
+                <div class="cost-row">
+                  <span>Costo de consulta</span>
+                  <strong id="sum2-cost">S/ 80.00</strong>
+                </div>
+                <div class="cost-row">
+                  <span>Seguro aplicado</span>
+                  <span class="insurance">PACÍFICO – EPS</span>
+                </div>
+              </div>
+              <div class="p-3">
+                <div
+                  class="text-center"
+                  style="
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    color: var(--primary);
+                    letter-spacing: 0.5px;
+                    text-transform: uppercase;
+                  "
+                >
+                  SIGUIENTE PASO: SELECCIONAR HORARIO
+                </div>
+              </div>
+              <div class="px-3 pb-3">
+                <div class="help-box">
+                  <h6><i class="bi bi-headset me-1"></i>¿Necesitas ayuda?</h6>
+                  <p>
+                    Si tienes problemas para encontrar a tu médico habitual,
+                    llámanos directamente.
+                  </p>
+                  <div class="phone">(01) 444-4444</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== STEP 3 =================== -->
+    <div id="step3" style="display: none">
+      <div class="stepper-wrap">
+        <div class="stepper">
+          <div class="step-item completed" data-step="1">
+            <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+            <span class="step-label">Especialidad</span>
+          </div>
+          <div class="step-item completed" data-step="2">
+            <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+            <span class="step-label">Médico</span>
+          </div>
+          <div class="step-item active" data-step="3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Fecha y Hora</span>
+          </div>
+          <div class="step-item" data-step="4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Confirmación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container main-content">
+        <div class="d-flex gap-4 flex-wrap flex-lg-nowrap">
+          <div class="content-col">
+            <!-- Calendar -->
+            <div class="card-section fade-in">
+              <div class="section-title">
+                <i class="bi bi-calendar3"></i>Seleccionar Fecha
+              </div>
+              <div class="cal-header">
+                <button class="cal-nav-btn" onclick="prevMonth()">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <span class="cal-month" id="calMonthLabel">Octubre 2023</span>
+                <button class="cal-nav-btn" onclick="nextMonth()">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+              <div class="cal-grid" id="calGrid"></div>
+            </div>
+
+            <!-- Time slots -->
+            <div class="card-section mt-3 fade-in">
+              <div class="section-title">
+                <i class="bi bi-clock"></i>Horarios Disponibles
+              </div>
+              <div class="time-section">
+                <div class="time-section-label">
+                  <i class="bi bi-brightness-high"></i>TURNO MAÑANA
+                </div>
+                <div class="slots-grid" id="morningSlots"></div>
+              </div>
+              <div class="time-section">
+                <div class="time-section-label">
+                  <i class="bi bi-moon-stars"></i>TURNO TARDE
+                </div>
+                <div class="slots-grid" id="afternoonSlots"></div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <button class="btn-back" onclick="goToStep2()">
+                <i class="bi bi-arrow-left"></i> Volver al paso anterior
+              </button>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="sidebar-col">
+            <div class="summary-card">
+              <div
+                class="summary-header"
+                style="
+                  background: linear-gradient(135deg, #1a56db 0%, #1344b4 100%);
+                "
+              >
+                <h6>
+                  <i class="bi bi-clipboard2-check me-2"></i>Resumen de Cita
+                </h6>
+                <small>Paso 3 de 4</small>
+              </div>
+              <div class="summary-body">
+                <div class="summary-row">
+                  <div class="summary-icon">
+                    <i class="bi bi-shield-plus"></i>
+                  </div>
+                  <div>
+                    <div class="summary-label">Especialidad</div>
+                    <div class="summary-value" id="sum3-specialty">
+                      Cardiología Clínica
+                    </div>
+                  </div>
+                </div>
+                <div class="summary-row">
+                  <div style="flex-shrink: 0">
+                    <img
+                      id="sum3-docImg"
+                      src="https://i.pravatar.cc/36?img=11"
+                      class="rounded-circle"
+                      width="36"
+                      height="36"
+                      alt=""
+                    />
+                  </div>
+                  <div>
+                    <div class="summary-label">Médico</div>
+                    <div class="summary-value" id="sum3-doctor">
+                      Dr. Ricardo Alvares
+                    </div>
+                    <div
+                      style="font-size: 0.75rem; color: var(--text-muted)"
+                      id="sum3-cmp"
+                    >
+                      CMP: 52341
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="px-3 pb-2">
+                <div class="summary-row" style="padding: 0.6rem 0">
+                  <div class="summary-icon">
+                    <i class="bi bi-calendar3"></i>
+                  </div>
+                  <div>
+                    <div
+                      class="summary-value"
+                      id="sum3-date"
+                      style="font-size: 0.85rem"
+                    >
+                      Selecciona una fecha
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="summary-row"
+                  style="padding: 0.6rem 0; border-bottom: none"
+                >
+                  <div class="summary-icon"><i class="bi bi-clock"></i></div>
+                  <div>
+                    <div
+                      class="summary-value"
+                      id="sum3-time"
+                      style="font-size: 0.85rem"
+                    >
+                      Selecciona una hora
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="p-3 d-flex flex-column gap-2">
+                <button
+                  class="btn-primary-full"
+                  id="step3ContinueBtn"
+                  onclick="goToStep4()"
+                  disabled
+                >
+                  Continuar <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+                <button class="btn-ghost-full" onclick="goToStep2()">
+                  Volver al paso anterior
+                </button>
+              </div>
+              <div class="px-3 pb-3">
+                <div class="alert-info-custom">
+                  <i class="bi bi-info-circle-fill"></i>
+                  <span
+                    >Su cita será confirmada tras completar el siguiente paso.
+                    Tiene 10 minutos para finalizar la reserva antes de que el
+                    horario se libere.</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== STEP 4 =================== -->
+    <div id="step4" style="display: none">
+      <div class="stepper-wrap">
+        <div class="stepper">
+          <div class="step-item completed" data-step="1">
+            <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+            <span class="step-label">Especialidad</span>
+          </div>
+          <div class="step-item completed" data-step="2">
+            <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+            <span class="step-label">Médico</span>
+          </div>
+          <div class="step-item completed" data-step="3">
+            <div class="step-circle"><i class="bi bi-check-lg"></i></div>
+            <span class="step-label">Horario</span>
+          </div>
+          <div class="step-item active" data-step="4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Confirmación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container main-content">
+        <div class="row justify-content-center">
+          <div class="col-lg-9">
+            <div class="text-center mb-4">
+              <h2
+                style="
+                  font-size: 1.75rem;
+                  font-weight: 800;
+                  letter-spacing: -0.5px;
+                "
+              >
+                Revisa tu Cita Médica
+              </h2>
+              <p class="text-muted" style="font-size: 0.9rem">
+                Verifica que todos los datos sean correctos antes de finalizar
+                tu reserva.
+              </p>
+            </div>
+
+            <div class="confirm-card fade-in">
+              <!-- Doctor + Cost row -->
+              <div class="d-flex flex-wrap">
+                <div class="confirm-doctor-row flex-fill">
+                  <img
+                    id="conf-docImg"
+                    src="https://i.pravatar.cc/80?img=11"
+                    class="confirm-doctor-img"
+                    alt="Doctor"
+                  />
+                  <div>
+                    <div class="specialty-tag" id="conf-specialty">
+                      CARDIOLOGÍA
+                    </div>
+                    <div
+                      style="
+                        font-size: 1.15rem;
+                        font-weight: 800;
+                        color: var(--text-main);
+                      "
+                      id="conf-doctor"
+                    >
+                      Dr. Alejandro Vildosola
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.8rem;
+                        color: var(--text-muted);
+                        margin: 0.2rem 0;
+                      "
+                      id="conf-title"
+                    >
+                      Médico Especialista Senior – CMP: 45821
+                    </div>
+                    <div class="verified-badge">
+                      <i class="bi bi-patch-check-fill"></i>Médico verificado
+                      por MediSys
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="cost-highlight"
+                  style="
+                    min-width: 180px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 0.72rem;
+                      font-weight: 700;
+                      opacity: 0.8;
+                      text-transform: uppercase;
+                      letter-spacing: 0.5px;
+                      margin-bottom: 0.3rem;
+                    "
+                  >
+                    Costo de la Consulta
+                  </div>
+                  <div class="amount" id="conf-cost">S/ 80.00</div>
+                  <div class="includes">
+                    Incluye IGV y revisión inicial de signos vitales.
+                  </div>
+                  <div class="accepts">
+                    <i class="bi bi-credit-card me-1"></i>Se aceptan todas las
+                    tarjetas
+                  </div>
+                </div>
+              </div>
+
+              <!-- Info pills -->
+              <div class="info-pills">
+                <div class="info-pill">
+                  <div class="pill-label">
+                    <i class="bi bi-calendar3"></i>Fecha
+                  </div>
+                  <div class="pill-value" id="conf-date">
+                    Jueves, 24 de Octubre
+                  </div>
+                </div>
+                <div class="info-pill">
+                  <div class="pill-label"><i class="bi bi-clock"></i>Hora</div>
+                  <div class="pill-value" id="conf-time">
+                    09:30 AM (Puntual)
+                  </div>
+                </div>
+                <div class="info-pill">
+                  <div class="pill-label">
+                    <i class="bi bi-geo-alt"></i>Sede
+                  </div>
+                  <div class="pill-value">Sede Central – San Isidro</div>
+                </div>
+              </div>
+
+              <!-- Prep + Actions -->
+              <div class="prep-bar">
+                <div class="prep-icon"><i class="bi bi-file-text"></i></div>
+                <div class="prep-text">
+                  <strong>Preparación previa</strong>
+                  Acudir 15 min antes con su DNI físico.
+                </div>
+                <button
+                  class="btn-confirm"
+                  id="confirmBtn"
+                  onclick="submitReservation()"
+                >
+                  <i class="bi bi-calendar2-check"></i>Confirmar Cita
+                </button>
+              </div>
+
+              <!-- Terms -->
+              <div class="terms-note">
+                Al confirmar, usted acepta nuestros
+                <a>términos de cancelación</a> y
+                <a>política de privacidad de datos médicos</a>.
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <button class="btn-back" onclick="goToStep3()">
+                <i class="bi bi-arrow-left"></i> Volver al paso anterior
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== SUCCESS =================== -->
+    <div id="step-success">
+      <div class="container">
+        <div class="success-wrap">
+          <div class="success-icon-wrap">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <h2>¡Cita Programada con Éxito!</h2>
+          <p>
+            Su reserva ha sido procesada correctamente. Se ha enviado un correo
+            de confirmación con los detalles y las indicaciones previas para su
+            consulta.
+          </p>
+          <div class="success-actions">
+            <button class="btn-new-appt" onclick="resetFlow()">
+              <i class="bi bi-plus-circle"></i>Programar otra cita
+            </button>
+            <button class="btn-profile">
+              <i class="bi bi-person-circle"></i>Ir a mi Perfil
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/reserva-cita.js}"></script>
+  </body>
+</html>

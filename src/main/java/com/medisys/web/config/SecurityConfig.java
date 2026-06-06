@@ -63,9 +63,8 @@ public class SecurityConfig {
                 // Rutas protegidas por rol
                 .requestMatchers("/").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/paciente/reserva-cita/**").hasAnyRole("PACIENTE","ADMIN")
-                .requestMatchers("/api/citas/reservar").hasAnyRole("PACIENTE","ADMIN")
-                .requestMatchers("/medico/historial-clinico/**").hasAnyRole("MEDICO","ADMIN")
+                .requestMatchers("/paciente", "/paciente/**").hasAnyRole("PACIENTE", "ADMIN")
+                .requestMatchers("/medico", "/medico/**").hasAnyRole("MEDICO", "ADMIN")
                 // Cualquier otra ruta requiere autenticación
                 .anyRequest().authenticated()
             )

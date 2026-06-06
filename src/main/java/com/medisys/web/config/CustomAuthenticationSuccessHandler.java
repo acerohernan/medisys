@@ -23,9 +23,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if (isAdmin) {
             response.sendRedirect(request.getContextPath() + "/");
         } else if (isPaciente) {
-            response.sendRedirect(request.getContextPath() + "/paciente/reserva-cita");
+            response.sendRedirect(request.getContextPath() + "/paciente");
         } else if (isMedico) {
-            response.sendRedirect(request.getContextPath() + "/medico/historial-clinico");
+            response.sendRedirect(request.getContextPath() + "/medico");
         } else {
             response.sendRedirect(request.getContextPath() + "/");
         }

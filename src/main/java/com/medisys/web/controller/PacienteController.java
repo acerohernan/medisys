@@ -20,6 +20,11 @@ public class PacienteController {
         this.medicoRepository = medicoRepository;
     }
 
+    @GetMapping("/paciente")
+    public String index(Authentication authentication, Model model) {
+        return "paciente/index";
+    }
+
     @GetMapping("/paciente/reserva-cita")
     public String reservaCita(Authentication authentication, Model model) {
         if (authentication != null && authentication.isAuthenticated()) {
@@ -27,6 +32,6 @@ public class PacienteController {
         }
         model.addAttribute("especialidades", especialidadRepository.findAll());
         model.addAttribute("medicos", medicoRepository.findAll());
-        return "reserva-cita";
+        return "paciente/reserva-cita";
     }
 }

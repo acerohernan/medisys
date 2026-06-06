@@ -19,10 +19,10 @@ public class RouteRedirectHelper {
             return "/";
         }
         if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_MEDICO"))) {
-            return "/medico/historial-clinico";
+            return "/medico";
         }
         if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PACIENTE"))) {
-            return "/paciente/reserva-cita";
+            return "/paciente";
         }
         return "/login";
     }
