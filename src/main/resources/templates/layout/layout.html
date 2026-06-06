@@ -51,45 +51,36 @@
       <!-- Nav -->
       <nav class="sidebar-nav">
         <ul class="list-unstyled mb-0">
-          <li><div class="nav-label">Principal</div></li>
+          <li><div class="nav-label">Pacientes</div></li>
 
           <li class="nav-item">
-            <a class="nav-link-item" href="#" data-page="panel">
-              <i class="bi bi-grid-1x2"></i>
-              <span>Panel Principal</span>
+            <a class="nav-link-item" href="/pacientes" data-page="citas">
+              <i class="bi bi-calendar3"></i>
+              <span>Mis Citas</span>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link-item" href="#" data-page="gestion">
-              <i class="bi bi-clipboard2-pulse"></i>
-              <span>Gestión Médica</span>
-              <span class="nav-badge">3</span>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link-item active" href="#" data-page="pacientes">
+            <a
+              class="nav-link-item active"
+              href="/pacientes/reserva-cita"
+              data-page="reserva-cita"
+            >
               <i class="bi bi-people"></i>
-              <span>Pacientes</span>
+              <span>Agendar cita</span>
             </a>
           </li>
 
-          <li><div class="nav-label">Análisis</div></li>
+          <li><div class="nav-label">Médico</div></li>
 
           <li class="nav-item">
-            <a class="nav-link-item" href="#" data-page="reportes">
-              <i class="bi bi-bar-chart-line"></i>
-              <span>Reportes</span>
-            </a>
-          </li>
-
-          <li><div class="nav-label">Sistema</div></li>
-
-          <li class="nav-item">
-            <a class="nav-link-item" href="#" data-page="config">
-              <i class="bi bi-gear"></i>
-              <span>Configuración</span>
+            <a
+              class="nav-link-item"
+              href="/medicos/historial"
+              data-page="historial"
+            >
+              <i class="bi bi-clipboard2-pulse"></i>
+              <span>Historial Médico</span>
             </a>
           </li>
         </ul>
@@ -97,11 +88,11 @@
 
       <!-- Footer -->
       <div class="sidebar-footer">
-        <a href="#" class="btn-nueva-consulta">
+        <!-- <a href="#" class="btn-logout">
           <i class="bi bi-plus-circle"></i>
           <span>Nueva Consulta</span>
-        </a>
-        <a href="#" class="btn-logout">
+        </a> -->
+        <a href="#" class="btn-nueva-consulta">
           <i class="bi bi-box-arrow-right"></i>
           <span>Cerrar Sesión</span>
         </a>
