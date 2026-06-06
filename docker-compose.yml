@@ -43,11 +43,17 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - medisys-network
 
 volumes:
   mysql-data:
+  caddy_data:
+  caddy_config:
 
 networks:
   medisys-network:
