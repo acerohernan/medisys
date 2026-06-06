@@ -88,14 +88,13 @@
 
       <!-- Footer -->
       <div class="sidebar-footer">
-        <!-- <a href="#" class="btn-logout">
-          <i class="bi bi-plus-circle"></i>
-          <span>Nueva Consulta</span>
-        </a> -->
-        <a href="#" class="btn-nueva-consulta">
-          <i class="bi bi-box-arrow-right"></i>
-          <span>Cerrar Sesión</span>
-        </a>
+        <form th:action="@{/logout}" method="post" style="display: inline">
+          <button type="submit" class="btn-nueva-consulta">
+            <i class="bi bi-box-arrow-right"></i>
+
+            <span>Cerrar Sesión</span>
+          </button>
+        </form>
       </div>
     </aside>
 
