@@ -1,5 +1,9 @@
 <!doctype html>
-<html lang="es">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,495 +23,507 @@
     <link rel="stylesheet" th:href="@{/css/paciente.css}" />
   </head>
   <body>
-    <!--VIEW CON CITAS -->
-    <div id="view-con-citas" th:if="${citas != null && !#lists.isEmpty(citas)}">
-      <main
-        class="container-fluid px-3 px-lg-4 py-4 flex-grow-1"
-        style="max-width: 1200px; margin: 0 auto"
+    <div layout:fragment="content">
       >
-        <!-- Page Header -->
-        <div
-          class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-3"
+      <!--VIEW CON CITAS -->
+      <div
+        id="view-con-citas"
+        th:if="${citas != null && !#lists.isEmpty(citas)}"
+      >
+        <main
+          class="container-fluid px-3 px-lg-4 py-4 flex-grow-1"
+          style="max-width: 1200px; margin: 0 auto"
         >
-          <div class="page-header">
-            <h1>
-              <i
-                class="bi bi-calendar2-check me-2"
-                style="color: var(--primary); font-size: 1.5rem"
-              ></i
-              >Mis Citas y Consultas
-            </h1>
-            <p class="mb-0">
-              Gestiona tus atenciones médicas y revisa tu historial clínico.
-            </p>
-          </div>
-          <a
-            class="btn-nueva-cita text-decoration-none"
-            href="/paciente/reserva-cita"
+          <!-- Page Header -->
+          <div
+            class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-3"
           >
-            <i class="bi bi-plus-circle-fill"></i> Nueva Reserva de Cita
-          </a>
-        </div>
+            <div class="page-header">
+              <h1>
+                <i
+                  class="bi bi-calendar2-check me-2"
+                  style="color: var(--primary); font-size: 1.5rem"
+                ></i
+                >Mis Citas y Consultas
+              </h1>
+              <p class="mb-0">
+                Gestiona tus atenciones médicas y revisa tu historial clínico.
+              </p>
+            </div>
+            <a
+              class="btn-nueva-cita text-decoration-none"
+              href="/paciente/reserva-cita"
+            >
+              <i class="bi bi-plus-circle-fill"></i> Nueva Reserva de Cita
+            </a>
+          </div>
 
-        <div class="row g-4">
-          <!-- ── COLUMNA PRINCIPAL ── -->
-          <div class="col-lg-8">
-            <!-- Citas Próximas -->
-            <div class="card-panel p-3 mb-4">
-              <div
-                class="d-flex align-items-center justify-content-between mb-3"
-              >
-                <div class="section-title">
-                  <i class="bi bi-clock-history"></i> Citas Próximas
-                </div>
-                <span
-                  class="badge-count"
-                  th:text="${#lists.size(citas)} + ' PENDIENTES'"
-                  >2 PENDIENTES</span
+          <div class="row g-4">
+            <!-- ── COLUMNA PRINCIPAL ── -->
+            <div class="col-lg-8">
+              <!-- Citas Próximas -->
+              <div class="card-panel p-3 mb-4">
+                <div
+                  class="d-flex align-items-center justify-content-between mb-3"
                 >
-              </div>
-
-              <div
-                class="d-flex flex-column gap-3"
-                th:if="${citas != null && !#lists.isEmpty(citas)}"
-              >
-                <div class="appt-card d-flex" th:each="cita : ${citas}">
-                  <div class="appt-date-col">
-                    <span
-                      class="day"
-                      th:text="${#temporals.format(cita.fechaHora, 'dd')}"
-                      >15</span
-                    >
-                    <span
-                      class="month"
-                      th:text="${#temporals.format(cita.fechaHora, 'MMMM').toUpperCase()}"
-                      >OCTUBRE</span
-                    >
-                    <span
-                      class="time"
-                      th:text="${#temporals.format(cita.fechaHora, 'hh:mm a')}"
-                      >09:30 AM</span
-                    >
+                  <div class="section-title">
+                    <i class="bi bi-clock-history"></i> Citas Próximas
                   </div>
-                  <div
-                    class="appt-body d-flex flex-column justify-content-center"
+                  <span
+                    class="badge-count"
+                    th:text="${#lists.size(citas)} + ' PENDIENTES'"
+                    >2 PENDIENTES</span
                   >
-                    <div class="d-flex align-items-center gap-2 mb-1">
+                </div>
+
+                <div
+                  class="d-flex flex-column gap-3"
+                  th:if="${citas != null && !#lists.isEmpty(citas)}"
+                >
+                  <div class="appt-card d-flex" th:each="cita : ${citas}">
+                    <div class="appt-date-col">
                       <span
-                        class="appt-specialty"
-                        th:text="${cita.medico.especialidad.nombre}"
-                        >Cardiología</span
+                        class="day"
+                        th:text="${#temporals.format(cita.fechaHora, 'dd')}"
+                        >15</span
                       >
                       <span
-                        class="badge-confirmed"
-                        th:if="${cita.estado != 'Programada'}"
+                        class="month"
+                        th:text="${#temporals.format(cita.fechaHora, 'MMMM').toUpperCase()}"
+                        >OCTUBRE</span
                       >
-                        <i class="bi bi-check-circle-fill"></i>
-                        Confirmada
-                      </span>
                       <span
-                        class="badge-pending"
-                        th:if="${cita.estado == 'Programada'}"
+                        class="time"
+                        th:text="${#temporals.format(cita.fechaHora, 'hh:mm a')}"
+                        >09:30 AM</span
                       >
-                        <i class="bi bi-hourglass-split"></i>
-                        Pendiente
-                      </span>
                     </div>
                     <div
-                      class="appt-doctor"
-                      th:text="${cita.medico.usuario.nombres} + ' ' + ${cita.medico.usuario.apellidos}"
+                      class="appt-body d-flex flex-column justify-content-center"
                     >
-                      Dr. Ricardo Alvares M.
-                    </div>
-                    <div class="appt-meta d-flex flex-wrap gap-3 mt-1">
-                      <span
-                        ><i class="bi bi-geo-alt me-1"></i
-                        ><span
-                          th:text="${cita.sede != null ? cita.sede : 'Sede Central – Consultorio 402'}"
-                          >Sede Central – Consultorio 402</span
-                        ></span
+                      <div class="d-flex align-items-center gap-2 mb-1">
+                        <span
+                          class="appt-specialty"
+                          th:text="${cita.medico.especialidad.nombre}"
+                          >Cardiología</span
+                        >
+                        <span
+                          class="badge-confirmed"
+                          th:if="${cita.estado != 'Programada'}"
+                        >
+                          <i class="bi bi-check-circle-fill"></i>
+                          Confirmada
+                        </span>
+                        <span
+                          class="badge-pending"
+                          th:if="${cita.estado == 'Programada'}"
+                        >
+                          <i class="bi bi-hourglass-split"></i>
+                          Pendiente
+                        </span>
+                      </div>
+                      <div
+                        class="appt-doctor"
+                        th:text="${cita.medico.usuario.nombres} + ' ' + ${cita.medico.usuario.apellidos}"
                       >
-                      <span
-                        ><i class="bi bi-clipboard2-pulse me-1"></i
-                        ><span
-                          th:text="${cita.motivo != null ? cita.motivo : 'Consulta médica'}"
-                          >Consulta de Seguimiento</span
-                        ></span
-                      >
+                        Dr. Ricardo Alvares M.
+                      </div>
+                      <div class="appt-meta d-flex flex-wrap gap-3 mt-1">
+                        <span
+                          ><i class="bi bi-geo-alt me-1"></i
+                          ><span
+                            th:text="${cita.sede != null ? cita.sede : 'Sede Central – Consultorio 402'}"
+                            >Sede Central – Consultorio 402</span
+                          ></span
+                        >
+                        <span
+                          ><i class="bi bi-clipboard2-pulse me-1"></i
+                          ><span
+                            th:text="${cita.motivo != null ? cita.motivo : 'Consulta médica'}"
+                            >Consulta de Seguimiento</span
+                          ></span
+                        >
+                      </div>
                     </div>
-                  </div>
-                  <!-- <div class="d-flex align-items-center px-3">
+                    <!-- <div class="d-flex align-items-center px-3">
                     <button class="btn-ver">Ver<br />Detalles</button>
                   </div> -->
+                  </div>
+                </div>
+                <div
+                  class="empty-box"
+                  th:if="${citas == null || #lists.isEmpty(citas)}"
+                >
+                  <div class="empty-icon">
+                    <i class="bi bi-calendar2-x"></i>
+                  </div>
+                  <h5>No hay citas programadas</h5>
+                  <p>
+                    Aún no tienes citas programadas. Empieza a cuidar tu salud
+                    agendando una consulta con nuestros especialistas.
+                  </p>
+                  <button class="btn-primera-cita">
+                    <i class="bi bi-calendar2-plus-fill"></i> Programar mi
+                    primera cita
+                  </button>
                 </div>
               </div>
-              <div
-                class="empty-box"
-                th:if="${citas == null || #lists.isEmpty(citas)}"
-              >
-                <div class="empty-icon"><i class="bi bi-calendar2-x"></i></div>
-                <h5>No hay citas programadas</h5>
-                <p>
-                  Aún no tienes citas programadas. Empieza a cuidar tu salud
-                  agendando una consulta con nuestros especialistas.
-                </p>
-                <button class="btn-primera-cita">
-                  <i class="bi bi-calendar2-plus-fill"></i> Programar mi primera
-                  cita
-                </button>
+
+              <!-- Historial de Consultas -->
+              <div class="card-panel p-3">
+                <div
+                  class="d-flex align-items-center justify-content-between mb-3"
+                >
+                  <div class="section-title">
+                    <i class="bi bi-clock-history"></i> Historial de Consultas
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table historial-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>Médico</th>
+                        <th>Especialidad</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      th:if="${consultas != null && !#lists.isEmpty(consultas)}"
+                      th:each="consulta : ${consultas}"
+                    >
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div
+                              class="doctor-avatar"
+                              th:text="${consulta.medico.usuario.nombres.substring(0,1)} + ${consulta.medico.usuario.apellidos.substring(0,1)}"
+                            >
+                              RS
+                            </div>
+                            <span
+                              th:text="${consulta.medico.usuario.nombres} + ' ' + consulta.medico.usuario.apellidos"
+                              >Dr. Roberto Sanchez</span
+                            >
+                          </div>
+                        </td>
+                        <td th:text="${consulta.medico.especialidad.nombre}">
+                          Medicina General
+                        </td>
+                        <td
+                          th:text="${#temporals.format(consulta.fecha, 'dd MMM yyyy')}"
+                        >
+                          12 Sep 2023
+                        </td>
+                        <td>
+                          <a href="#" class="link-accion"
+                            ><i class="bi bi-file-earmark-text"></i> Ver</a
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody
+                      th:if="${consultas == null || #lists.isEmpty(consultas)}"
+                    >
+                      <tr>
+                        <td colspan="4">
+                          <div class="empty-historial">
+                            <i class="bi bi-file-earmark-x"></i>
+                            <span
+                              >Una vez que asista a sus citas, aquí aparecerán
+                              sus registros médicos y recomendaciones.</span
+                            >
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
+            <!-- /col-lg-8 -->
 
-            <!-- Historial de Consultas -->
-            <div class="card-panel p-3">
-              <div
-                class="d-flex align-items-center justify-content-between mb-3"
-              >
-                <div class="section-title">
+            <!-- ── SIDEBAR ── -->
+            <div class="col-lg-4 d-flex flex-column gap-3">
+              <!-- Recordatorios -->
+              <div class="side-card">
+                <div class="reminder-title">
+                  <i class="bi bi-info-circle-fill"></i> Recordatorios
+                </div>
+                <div class="reminder-item">
+                  <i class="bi bi-alarm-fill mt-1"></i>
+                  <span
+                    ><strong>Puntualidad:</strong> Por favor llegue 15 minutos
+                    antes de su cita para el registro.</span
+                  >
+                </div>
+                <div class="reminder-item">
+                  <i class="bi bi-folder2-open mt-1"></i>
+                  <span
+                    ><strong>Documentación:</strong> No olvide traer su DNI y
+                    carnet de seguro vigente.</span
+                  >
+                </div>
+                <div class="reminder-item mb-0">
+                  <i class="bi bi-shield-check mt-1"></i>
+                  <span
+                    ><strong>Bioseguridad:</strong> El uso de mascarilla es
+                    obligatorio en zonas de triaje y consultorios.</span
+                  >
+                </div>
+              </div>
+
+              <!-- Emergencia -->
+              <div class="emergency-card">
+                <div class="title">
+                  <i class="bi bi-heart-pulse-fill me-1"></i> ¿Emergencia
+                  Médica?
+                </div>
+                <div class="phone mt-1">Llama al (01) 555-0000</div>
+                <p class="mt-1">
+                  Central de emergencias disponible las 24 horas del día.
+                </p>
+              </div>
+
+              <!-- App -->
+              <div class="app-card">
+                <h6>
+                  <i class="bi bi-phone-fill me-1"></i> Tu salud es nuestra
+                  prioridad
+                </h6>
+                <p>
+                  MediSys es un sistema de gestión clínica diseñado para mejorar
+                  la experiencia de los pacientes, optimizar la atención médica
+                  y facilitar la administración de las clínicas.
+                </p>
+              </div>
+            </div>
+            <!-- /sidebar -->
+          </div>
+          <!-- /row -->
+        </main>
+      </div>
+
+      <!-- VIEW: SIN CITAS (NUEVO PACIENTE) -->
+      <div id="view-empty" th:if="${citas == null || #lists.isEmpty(citas)}">
+        <main
+          class="container-fluid px-3 px-lg-4 py-4 flex-grow-1"
+          style="max-width: 1200px; margin: 0 auto"
+        >
+          <!-- Page Header -->
+          <div class="page-header mb-4">
+            <h1>
+              ¡Bienvenido a
+              <span style="color: var(--primary)">Clínica Salud Perú</span>!
+            </h1>
+            <p class="mb-0">
+              Estamos aquí para cuidar de tu bienestar. Comienza gestionando tu
+              salud de manera sencilla y profesional.
+            </p>
+          </div>
+
+          <div class="row g-4">
+            <!-- COLUMNA PRINCIPAL -->
+            <div class="col-lg-8 d-flex flex-column gap-4">
+              <!-- Empty: Citas -->
+              <div class="card-panel p-3">
+                <div class="section-title mb-3">
+                  <i class="bi bi-clock-history"></i> Citas Próximas
+                </div>
+                <div class="empty-box">
+                  <div class="empty-icon">
+                    <i class="bi bi-calendar2-x"></i>
+                  </div>
+                  <h5>Citas Próximas</h5>
+                  <p>
+                    Aún no tienes citas programadas. Empieza a cuidar tu salud
+                    agendando una consulta con nuestros especialistas.
+                  </p>
+                  <button class="btn-primera-cita">
+                    <i class="bi bi-calendar2-plus-fill"></i> Programar mi
+                    primera cita
+                  </button>
+                </div>
+              </div>
+
+              <!-- Empty: Historial -->
+              <div class="card-panel p-3">
+                <div class="section-title mb-3">
                   <i class="bi bi-clock-history"></i> Historial de Consultas
                 </div>
-              </div>
-              <div class="table-responsive">
-                <table class="table historial-table mb-0">
-                  <thead>
-                    <tr>
-                      <th>Médico</th>
-                      <th>Especialidad</th>
-                      <th>Fecha</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody
-                    th:if="${consultas != null && !#lists.isEmpty(consultas)}"
-                    th:each="consulta : ${consultas}"
-                  >
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center gap-2">
-                          <div
-                            class="doctor-avatar"
-                            th:text="${consulta.medico.usuario.nombres.substring(0,1)} + ${consulta.medico.usuario.apellidos.substring(0,1)}"
-                          >
-                            RS
+                <div
+                  class="table-responsive"
+                  th:if="${consultas != null && !#lists.isEmpty(consultas)}"
+                >
+                  <table class="table historial-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>Médico</th>
+                        <th>Especialidad</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody th:each="consulta : ${consultas}">
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div
+                              class="doctor-avatar"
+                              th:text="${consulta.medico.usuario.nombres.substring(0,1)} + ${consulta.medico.usuario.apellidos.substring(0,1)}"
+                            >
+                              RS
+                            </div>
+                            <span
+                              th:text="${consulta.medico.usuario.nombres} + ' ' + consulta.medico.usuario.apellidos"
+                              >Dr. Roberto Sanchez</span
+                            >
                           </div>
-                          <span
-                            th:text="${consulta.medico.usuario.nombres} + ' ' + consulta.medico.usuario.apellidos"
-                            >Dr. Roberto Sanchez</span
-                          >
-                        </div>
-                      </td>
-                      <td th:text="${consulta.medico.especialidad.nombre}">
-                        Medicina General
-                      </td>
-                      <td
-                        th:text="${#temporals.format(consulta.fecha, 'dd MMM yyyy')}"
-                      >
-                        12 Sep 2023
-                      </td>
-                      <td>
-                        <a href="#" class="link-accion"
-                          ><i class="bi bi-file-earmark-text"></i> Ver</a
+                        </td>
+                        <td th:text="${consulta.medico.especialidad.nombre}">
+                          Medicina General
+                        </td>
+                        <td
+                          th:text="${#temporals.format(consulta.fecha, 'dd MMM yyyy')}"
                         >
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tbody
-                    th:if="${consultas == null || #lists.isEmpty(consultas)}"
-                  >
-                    <tr>
-                      <td colspan="4">
-                        <div class="empty-historial">
-                          <i class="bi bi-file-earmark-x"></i>
-                          <span
-                            >Una vez que asista a sus citas, aquí aparecerán sus
-                            registros médicos y recomendaciones.</span
+                          12 Sep 2023
+                        </td>
+                        <td>
+                          <a href="#" class="link-accion"
+                            ><i class="bi bi-file-earmark-text"></i> Ver</a
                           >
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <!-- /col-lg-8 -->
-
-          <!-- ── SIDEBAR ── -->
-          <div class="col-lg-4 d-flex flex-column gap-3">
-            <!-- Recordatorios -->
-            <div class="side-card">
-              <div class="reminder-title">
-                <i class="bi bi-info-circle-fill"></i> Recordatorios
-              </div>
-              <div class="reminder-item">
-                <i class="bi bi-alarm-fill mt-1"></i>
-                <span
-                  ><strong>Puntualidad:</strong> Por favor llegue 15 minutos
-                  antes de su cita para el registro.</span
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  class="empty-historial"
+                  th:if="${consultas == null || #lists.isEmpty(consultas)}"
                 >
+                  <i class="bi bi-file-earmark-x"></i>
+                  <span
+                    >Una vez que asista a sus citas, aquí aparecerán sus
+                    registros médicos y recomendaciones.</span
+                  >
+                </div>
               </div>
-              <div class="reminder-item">
-                <i class="bi bi-folder2-open mt-1"></i>
-                <span
-                  ><strong>Documentación:</strong> No olvide traer su DNI y
-                  carnet de seguro vigente.</span
+            </div>
+
+            <!-- SIDEBAR EMPTY -->
+            <div class="col-lg-4 d-flex flex-column gap-3">
+              <!-- Emergencia (roja llamativa) -->
+              <div
+                style="
+                  background: linear-gradient(135deg, #dc2626, #ef4444);
+                  border-radius: var(--radius);
+                  padding: 1.1rem;
+                  color: #fff;
+                  box-shadow: var(--shadow-md);
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.65rem;
+                    font-weight: 800;
+                    letter-spacing: 1.2px;
+                    text-transform: uppercase;
+                    opacity: 0.8;
+                    margin-bottom: 0.3rem;
+                  "
                 >
-              </div>
-              <div class="reminder-item mb-0">
-                <i class="bi bi-shield-check mt-1"></i>
-                <span
-                  ><strong>Bioseguridad:</strong> El uso de mascarilla es
-                  obligatorio en zonas de triaje y consultorios.</span
+                  <i class="bi bi-exclamation-octagon-fill me-1"></i> Emergencia
+                  Médica
+                </div>
+                <p
+                  style="
+                    font-size: 0.82rem;
+                    font-weight: 500;
+                    margin: 0.25rem 0 0.75rem;
+                    opacity: 0.9;
+                  "
                 >
-              </div>
-            </div>
-
-            <!-- Emergencia -->
-            <div class="emergency-card">
-              <div class="title">
-                <i class="bi bi-heart-pulse-fill me-1"></i> ¿Emergencia Médica?
-              </div>
-              <div class="phone mt-1">Llama al (01) 555-0000</div>
-              <p class="mt-1">
-                Central de emergencias disponible las 24 horas del día.
-              </p>
-            </div>
-
-            <!-- App -->
-            <div class="app-card">
-              <h6>
-                <i class="bi bi-phone-fill me-1"></i> Tu salud es nuestra
-                prioridad
-              </h6>
-              <p>
-                MediSys es un sistema de gestión clínica diseñado para mejorar
-                la experiencia de los pacientes, optimizar la atención médica y
-                facilitar la administración de las clínicas.
-              </p>
-            </div>
-          </div>
-          <!-- /sidebar -->
-        </div>
-        <!-- /row -->
-      </main>
-    </div>
-
-    <!-- VIEW: SIN CITAS (NUEVO PACIENTE) -->
-    <div id="view-empty" th:if="${citas == null || #lists.isEmpty(citas)}">
-      <main
-        class="container-fluid px-3 px-lg-4 py-4 flex-grow-1"
-        style="max-width: 1200px; margin: 0 auto"
-      >
-        <!-- Page Header -->
-        <div class="page-header mb-4">
-          <h1>
-            ¡Bienvenido a
-            <span style="color: var(--primary)">Clínica Salud Perú</span>!
-          </h1>
-          <p class="mb-0">
-            Estamos aquí para cuidar de tu bienestar. Comienza gestionando tu
-            salud de manera sencilla y profesional.
-          </p>
-        </div>
-
-        <div class="row g-4">
-          <!-- COLUMNA PRINCIPAL -->
-          <div class="col-lg-8 d-flex flex-column gap-4">
-            <!-- Empty: Citas -->
-            <div class="card-panel p-3">
-              <div class="section-title mb-3">
-                <i class="bi bi-clock-history"></i> Citas Próximas
-              </div>
-              <div class="empty-box">
-                <div class="empty-icon"><i class="bi bi-calendar2-x"></i></div>
-                <h5>Citas Próximas</h5>
-                <p>
-                  Aún no tienes citas programadas. Empieza a cuidar tu salud
-                  agendando una consulta con nuestros especialistas.
+                  Central de Urgencias 24/7. Estamos listos para atenderte en
+                  cualquier momento.
                 </p>
-                <button class="btn-primera-cita">
-                  <i class="bi bi-calendar2-plus-fill"></i> Programar mi primera
-                  cita
+                <button
+                  style="
+                    background: #fff;
+                    color: var(--danger);
+                    border: none;
+                    border-radius: 6px;
+                    font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
+                    font-weight: 800;
+                    font-size: 0.88rem;
+                    padding: 0.5rem 1rem;
+                    width: 100%;
+                    cursor: pointer;
+                  "
+                >
+                  <i class="bi bi-telephone-fill me-1"></i> Llamar ahora: (01)
+                  555-5555
                 </button>
               </div>
-            </div>
 
-            <!-- Empty: Historial -->
-            <div class="card-panel p-3">
-              <div class="section-title mb-3">
-                <i class="bi bi-clock-history"></i> Historial de Consultas
-              </div>
-              <div
-                class="table-responsive"
-                th:if="${consultas != null && !#lists.isEmpty(consultas)}"
-              >
-                <table class="table historial-table mb-0">
-                  <thead>
-                    <tr>
-                      <th>Médico</th>
-                      <th>Especialidad</th>
-                      <th>Fecha</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody th:each="consulta : ${consultas}">
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center gap-2">
-                          <div
-                            class="doctor-avatar"
-                            th:text="${consulta.medico.usuario.nombres.substring(0,1)} + ${consulta.medico.usuario.apellidos.substring(0,1)}"
-                          >
-                            RS
-                          </div>
-                          <span
-                            th:text="${consulta.medico.usuario.nombres} + ' ' + consulta.medico.usuario.apellidos"
-                            >Dr. Roberto Sanchez</span
-                          >
-                        </div>
-                      </td>
-                      <td th:text="${consulta.medico.especialidad.nombre}">
-                        Medicina General
-                      </td>
-                      <td
-                        th:text="${#temporals.format(consulta.fecha, 'dd MMM yyyy')}"
-                      >
-                        12 Sep 2023
-                      </td>
-                      <td>
-                        <a href="#" class="link-accion"
-                          ><i class="bi bi-file-earmark-text"></i> Ver</a
-                        >
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div
-                class="empty-historial"
-                th:if="${consultas == null || #lists.isEmpty(consultas)}"
-              >
-                <i class="bi bi-file-earmark-x"></i>
-                <span
-                  >Una vez que asista a sus citas, aquí aparecerán sus registros
-                  médicos y recomendaciones.</span
+              <!-- Recordatorios NUEVO -->
+              <div class="side-card">
+                <div
+                  class="d-flex align-items-center justify-content-between mb-3"
                 >
+                  <div class="reminder-title mb-0">
+                    <i class="bi bi-bell-fill"></i> Recordatorios
+                  </div>
+                  <span class="badge-nuevo">NUEVO</span>
+                </div>
+                <div class="record-item">
+                  <div class="icon-wrap">
+                    <i class="bi bi-person-fill-check"></i>
+                  </div>
+                  <div>
+                    <h6>Completa tu perfil</h6>
+                    <p>
+                      Ayúdanos a conocerte mejor para una atención
+                      personalizada.
+                    </p>
+                  </div>
+                </div>
+                <div class="record-item mb-0">
+                  <div class="icon-wrap">
+                    <i class="bi bi-shield-fill-check"></i>
+                  </div>
+                  <div>
+                    <h6>Vincula tu seguro</h6>
+                    <p>
+                      Agiliza tus trámites vinculando tu EPS o seguro privado.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cápsula de salud -->
+              <div class="capsula-card">
+                <div>
+                  <div class="label">Cápsula de Salud</div>
+                  <h6>La importancia de un chequeo anual preventivo.</h6>
+                </div>
               </div>
             </div>
           </div>
-
-          <!-- SIDEBAR EMPTY -->
-          <div class="col-lg-4 d-flex flex-column gap-3">
-            <!-- Emergencia (roja llamativa) -->
-            <div
-              style="
-                background: linear-gradient(135deg, #dc2626, #ef4444);
-                border-radius: var(--radius);
-                padding: 1.1rem;
-                color: #fff;
-                box-shadow: var(--shadow-md);
-              "
-            >
-              <div
-                style="
-                  font-size: 0.65rem;
-                  font-weight: 800;
-                  letter-spacing: 1.2px;
-                  text-transform: uppercase;
-                  opacity: 0.8;
-                  margin-bottom: 0.3rem;
-                "
-              >
-                <i class="bi bi-exclamation-octagon-fill me-1"></i> Emergencia
-                Médica
-              </div>
-              <p
-                style="
-                  font-size: 0.82rem;
-                  font-weight: 500;
-                  margin: 0.25rem 0 0.75rem;
-                  opacity: 0.9;
-                "
-              >
-                Central de Urgencias 24/7. Estamos listos para atenderte en
-                cualquier momento.
-              </p>
-              <button
-                style="
-                  background: #fff;
-                  color: var(--danger);
-                  border: none;
-                  border-radius: 6px;
-                  font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
-                  font-weight: 800;
-                  font-size: 0.88rem;
-                  padding: 0.5rem 1rem;
-                  width: 100%;
-                  cursor: pointer;
-                "
-              >
-                <i class="bi bi-telephone-fill me-1"></i> Llamar ahora: (01)
-                555-5555
-              </button>
-            </div>
-
-            <!-- Recordatorios NUEVO -->
-            <div class="side-card">
-              <div
-                class="d-flex align-items-center justify-content-between mb-3"
-              >
-                <div class="reminder-title mb-0">
-                  <i class="bi bi-bell-fill"></i> Recordatorios
-                </div>
-                <span class="badge-nuevo">NUEVO</span>
-              </div>
-              <div class="record-item">
-                <div class="icon-wrap">
-                  <i class="bi bi-person-fill-check"></i>
-                </div>
-                <div>
-                  <h6>Completa tu perfil</h6>
-                  <p>
-                    Ayúdanos a conocerte mejor para una atención personalizada.
-                  </p>
-                </div>
-              </div>
-              <div class="record-item mb-0">
-                <div class="icon-wrap">
-                  <i class="bi bi-shield-fill-check"></i>
-                </div>
-                <div>
-                  <h6>Vincula tu seguro</h6>
-                  <p>
-                    Agiliza tus trámites vinculando tu EPS o seguro privado.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Cápsula de salud -->
-            <div class="capsula-card">
-              <div>
-                <div class="label">Cápsula de Salud</div>
-                <h6>La importancia de un chequeo anual preventivo.</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-
-    <!-- ══════════ FOOTER ══════════ -->
-    <footer class="py-3 mt-auto">
-      <div class="container-fluid text-center">
-        © 2024 Clínica Salud Perú. Todos los derechos reservados.
-        <span class="mx-2">|</span>
-        <a href="#">Términos y Condiciones</a>
+        </main>
       </div>
-    </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/js/paciente.js}"></script>
+      <!-- ══════════ FOOTER ══════════ -->
+      <footer class="py-3 mt-auto">
+        <div class="container-fluid text-center">
+          © 2024 Clínica Salud Perú. Todos los derechos reservados.
+          <span class="mx-2">|</span>
+          <a href="#">Términos y Condiciones</a>
+        </div>
+      </footer>
+
+      <!-- Bootstrap JS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+      <script th:src="@{/js/paciente.js}"></script>
+    </div>
   </body>
 </html>
